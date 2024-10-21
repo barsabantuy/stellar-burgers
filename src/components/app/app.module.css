@@ -1,0 +1,16 @@
+.appContainer {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    justify-items: center;
+    min-height: 100vh;
+}
+
+.mainContent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 1200px;
+    max-height: 800px;
+    width: 100%;
+    justify-items: center;
+}
