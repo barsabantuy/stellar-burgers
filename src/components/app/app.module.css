@@ -1,0 +1,17 @@
+/* app.module.css */
+.appContainer {
+    display: grid;
+    grid-template-rows: auto 1fr; /* Auto height for header, flexible height for main content */
+    justify-items: center; /* Centers the header and the main content horizontally */
+    min-height: 100vh;
+}
+
+.mainContent {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Equal space for both ingredients and constructor */
+    gap: 20px; /* Space between the two columns */
+    max-width: 1200px; /* Fixed width for both components combined */
+    max-height: 800px; /* Max height for the main content area */
+    width: 100%; /* Fallback for smaller screens */
+    justify-items: center; /* Centers both the constructor and ingredients */
+}
