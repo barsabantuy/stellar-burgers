@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './burger-constructor.module.css';
 import {Button, ConstructorElement, CurrencyIcon, DragIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
+import ingredientPropType from "../../utils/types";
 
 function BurgerConstructor(props) {
     return (
@@ -10,9 +11,9 @@ function BurgerConstructor(props) {
                 <ConstructorElement
                     type="top"
                     isLocked={true}
-                    text={props.top.name}
-                    price={props.top.price}
-                    thumbnail={props.top.image}
+                    text={`${props.bun.name} (верх)`}
+                    price={props.bun.price}
+                    thumbnail={props.bun.image}
                 />
             </div>
             {props.ingredients && <ul className={styles.itemList}>
@@ -35,9 +36,9 @@ function BurgerConstructor(props) {
                 <ConstructorElement
                     type="bottom"
                     isLocked={true}
-                    text={props.bottom.name}
-                    price={props.bottom.price}
-                    thumbnail={props.bottom.image}
+                    text={`${props.bun.name} (верх)`}
+                    price={props.bun.price}
+                    thumbnail={props.bun.image}
                 />
             </div>
             <section className={styles.order}>
@@ -53,25 +54,9 @@ function BurgerConstructor(props) {
     );
 }
 
-const ingredientPropType = PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    type: PropTypes.oneOf(['bun', 'sauce', 'main']).isRequired,
-    proteins: PropTypes.number,
-    fat: PropTypes.number,
-    carbohydrates: PropTypes.number,
-    calories: PropTypes.number,
-    price: PropTypes.number.isRequired,
-    image: PropTypes.string,
-    image_mobile: PropTypes.string,
-    image_large: PropTypes.string,
-    __v: PropTypes.number
-})
-
 BurgerConstructor.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientPropType),
-    top: ingredientPropType,
-    bottom: ingredientPropType,
+    ingredients: PropTypes.arrayOf(ingredientPropType).isRequired,
+    bun: ingredientPropType.isRequired
 }
 
 export default BurgerConstructor;
