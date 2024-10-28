@@ -1,0 +1,64 @@
+.container {
+    padding-top: 40px;
+    width: 600px;
+    box-sizing: border-box;
+}
+
+.tabPanel {
+    display: flex;
+    margin-top: 20px;
+}
+
+.article {
+    height: calc(100vh - 300px);
+    overflow-y: scroll;
+    padding-right: 10px;
+}
+
+.article::-webkit-scrollbar {
+    width: 8px;
+}
+
+.article::-webkit-scrollbar-track {
+    background: #1c1c21;
+}
+
+.article::-webkit-scrollbar-thumb {
+    background-color: #6a6a6a;
+    border-radius: 4px;
+}
+
+.ingredients {
+    padding-top: 40px;
+}
+
+.itemList {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding: 24px 0 40px 16px;
+    margin: 0;
+    list-style: none;
+}
+
+.item {
+    padding: 0 16px 16px;
+    width: 275px;
+    text-align: center;
+    box-sizing: border-box;
+    position: relative;
+    cursor: pointer;
+}
+
+.item img {
+    object-fit: cover;
+}
+
+.price {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0;
+}

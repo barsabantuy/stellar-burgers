@@ -1,0 +1,40 @@
+.container {
+    display: flex;
+    justify-content: center;
+    background-color: #1c1c1c;
+    width: 100%;
+}
+
+.appHeader {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    box-sizing: border-box;
+}
+
+.leftNav, .rightNav {
+    display: flex;
+    flex: 1;
+}
+
+.menu, .menuRight {
+    padding: 0;
+    display: flex;
+    list-style: none;
+}
+
+.item, .profile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 20px;
+}
+
+.logoContainer {
+    margin: auto;
+}
+
+.rightNav {
+    justify-content: flex-end;
+}

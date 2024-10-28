@@ -1,0 +1,28 @@
+.modal {
+    background-color: #1C1C21;
+    transform: translate(-50%, -50%);
+    padding: 40px 40px 60px;
+    border-radius: 20px;
+    z-index: 1100;
+    max-width: 90%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 720px;
+    box-sizing: border-box;
+}
+
+.closeButton {
+    position: absolute;
+    top: 60px;
+    right: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    line-height: 0;
+}
+
+.closeButton:focus {
+    outline: none;
+}
