@@ -1,90 +1,120 @@
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import styles from './burger-ingredients.module.css';
-import {Counter, CurrencyIcon, Tab} from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
-import ingredientPropType from "../../utils/types";
+import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
+import { useDispatch, useSelector } from "react-redux";
+import { burgerIngredientsActions, fetchBurgerIngredients } from "../../services/burger-ingredients-slice"
+import { ingredientDetailsActions } from "../../services/ingredient-details-slice"
+import {useInView} from "react-intersection-observer";
+import Ingredient from "./ingredient";
 
-function BurgerIngredients(props) {
+function BurgerIngredients() {
 
-    const [ isModalOpen, setIsModalOpen] = useState(false);
-    const [ currentItem, setCurrentItem] = useState(false);
+    const bunsRef = useRef(null);
+    const saucesRef = useRef(null);
+    const mainsRef = useRef(null);
+
+    const [bunsInViewRef, bunsInView] = useInView({ threshold: 0.1 });
+    const [saucesInViewRef, saucesInView] = useInView({ threshold: 0.1 });
+    const [mainsInViewRef, mainsInView] = useInView({ threshold: 0.1 });
+    const dispatch = useDispatch();
+
+    const sections = [
+        { name: 'Булки', id: 'bun', ref: bunsRef, refInView: bunsInViewRef },
+        { name: 'Соусы', id: 'sauce', ref: saucesRef, refInView: saucesInViewRef },
+        { name: 'Начинки', id: 'main', ref: mainsRef, refInView: mainsInViewRef }
+    ];
+
+    React.useEffect(() => {
+        if (bunsInView) {
+            dispatch(burgerIngredientsActions.setActiveSection('bun'));
+        } else if (saucesInView) {
+            dispatch(burgerIngredientsActions.setActiveSection('sauce'));
+        } else if (mainsInView) {
+            dispatch(burgerIngredientsActions.setActiveSection('main'));
+        }
+    }, [bunsInView, saucesInView, mainsInView, dispatch]);
+
+    const setRefs = useCallback(
+        (node, ref, inViewRef) => {
+            ref.current = node;
+            inViewRef(node);
+        },[],
+    );
+
+    const { isModalOpen, ingredients, activeSection } = useSelector(store => store.burgerIngredients);
+    const { bun, ingredients: constructorIngredients } = useSelector(store => store.burgerConstructor);
+
+    const usedIngredientsCounter = useMemo(() => {
+        const counter = {};
+        constructorIngredients.forEach(ingredient => {
+            counter[ingredient._id] = (counter[ingredient._id] || 0) + 1;
+        });
+        if (bun) {
+            counter[bun._id] = 2;
+        }
+        return counter;
+    }, [bun, constructorIngredients]);
+
+    useEffect(() => {
+        dispatch(fetchBurgerIngredients())
+    }, [dispatch]);
 
     const openModal = (item) => () => {
-        setCurrentItem(item);
-        setIsModalOpen(true);
+        dispatch(ingredientDetailsActions.setCurrentIngredient(item));
+        dispatch(burgerIngredientsActions.openModal());
     }
 
     const closeModal = () => {
-        setIsModalOpen(false);
+        dispatch(burgerIngredientsActions.closeModal());
+        dispatch(ingredientDetailsActions.cleanCurrentIngredient());
     }
 
     const filterIngredientsByType = type => {
-        return props.ingredients && props.ingredients.filter(item => item.type === type);
-    }
-
-    const buns = filterIngredientsByType("bun");
-    const sauces = filterIngredientsByType("sauce");
-    const mains = filterIngredientsByType("main");
-
-    const getIngredientList = (items, name) => {
-        return (
-            <section className={styles.ingredients}>
-                <h2 className="text text_type_main-medium">{name}</h2>
-                <ul className={styles.itemList}>
-                    {items.map(item => {
-                        return (
-                            <li className={styles.item} key={item._id} onClick={openModal(item)}>
-                                <Counter count={1} size="default" extraClass="m-1" />
-                                <img src={item.image} alt={item.name}/>
-                                <div className={styles.price}>
-                                    <p className="text text_type_digits-default">
-                                        {item.price}
-                                    </p>
-                                    <CurrencyIcon type="primary" />
-                                </div>
-                                <h3 className="text text_type_main-small">
-                                    {item.name}
-                                </h3>
-                            </li>
-                        )
-                    })}
-                </ul>
-            </section>
-        );
+        return ingredients && ingredients.filter(item => item.type === type);
     }
 
     return (
         <div className={styles.container}>
             <h1 className="text text_type_main-large">Соберите бургер</h1>
-            <section className={styles.tabPanel}>
-                {buns && <Tab value="one" active={true}>
-                    Булки
-                </Tab>}
-                {sauces && <Tab value="two" active={false}>
-                    Соусы
-                </Tab>}
-                {mains && <Tab value="three" active={false}>
-                    Начинки
-                </Tab>}
-            </section>
-            <article className={styles.article}>
-                {buns && getIngredientList(buns, 'Булки')}
-                {sauces && getIngredientList(sauces, 'Соусы')}
-                {mains && getIngredientList(mains, 'Начинки')}
-                {isModalOpen &&
-                    <Modal onClose={closeModal} root={document.getElementById('app')}
-                           title='Детали ингредиента'>
-                        <IngredientDetails ingredient={currentItem} />
-                    </Modal>}
-            </article>
+            <nav className={styles.tabPanel}>
+                {sections.map(section => (
+                    <Tab
+                        value={section.id}
+                        active={activeSection === section.id}
+                        key={section.id}
+                        onClick={() => section.ref.current.scrollIntoView({ behavior: 'smooth' })}
+                    >
+                        {section.name}
+                    </Tab>
+                ))}
+            </nav>
+
+            <div className={styles.article}>
+                {sections.map(section => (
+                    <section className={styles.ingredients} id={section.id}
+                             ref={el => setRefs(el, section.ref, section.refInView)}
+                             key={section.id}>
+                        <h2 className="text text_type_main-medium">{section.name}</h2>
+                        <ul className={styles.itemList}>
+                            {filterIngredientsByType(section.id).map(item => (
+                                <li key={item._id} onClick={openModal(item)}>
+                                    <Ingredient item={item} counter={usedIngredientsCounter[item._id]} />
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                    ))}
+            </div>
+
+            {isModalOpen &&
+                <Modal onClose={closeModal} root={document.getElementById('app')}
+                       title='Детали ингредиента'>
+                    <IngredientDetails />
+                </Modal>}
         </div>
     );
-}
-
-BurgerIngredients.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientPropType).isRequired
 }
 
 export default BurgerIngredients;
