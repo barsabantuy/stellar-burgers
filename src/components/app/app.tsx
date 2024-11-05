@@ -10,7 +10,7 @@ import {HTML5Backend} from "react-dnd-html5-backend";
 
 function App() {
     return (
-        <div className={styles.appContainer} id='app'>
+        <div className={styles.appContainer}>
             <ErrorBoundary>
                 <AppHeader />
                 <main className={styles.mainContent}>

@@ -1,18 +1,11 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import styles from './order-details.module.css';
 import {CheckMarkIcon} from "@ya.praktikum/react-developer-burger-ui-components";
-import {useDispatch, useSelector} from "react-redux";
-import {createOrder} from "../../services/order-details-slice";
+import {useSelector} from "react-redux";
 
 function OrderDetails() {
 
-    const { bun, ingredients } = useSelector(store => store.burgerConstructor);
     const { order, loading, error } = useSelector(store => store.orderDetails);
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(createOrder([bun, ...ingredients, bun]));
-    }, [dispatch, bun, ingredients]);
 
     if (loading) {
         return (

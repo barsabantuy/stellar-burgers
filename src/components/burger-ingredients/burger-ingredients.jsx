@@ -109,7 +109,7 @@ function BurgerIngredients() {
             </div>
 
             {isModalOpen &&
-                <Modal onClose={closeModal} root={document.getElementById('app')}
+                <Modal onClose={closeModal} root={document.getElementById('modals')}
                        title='Детали ингредиента'>
                     <IngredientDetails />
                 </Modal>}

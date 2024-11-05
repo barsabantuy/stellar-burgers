@@ -1,14 +1,13 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {postOrder} from "./api";
+import { checkResponse } from '../utils';
 
 export const createOrder = createAsyncThunk(
     'orderDetails/createOrder',
     async (ingredients, thunkAPI) => {
-        const response = await postOrder(ingredients);
-        if (!response.ok) {
-            return thunkAPI.rejectWithValue(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
+        return postOrder(ingredients)
+            .then(checkResponse)
+            .catch(error => thunkAPI.rejectWithValue(error.message));
     }
 );
 
@@ -31,6 +30,7 @@ const orderDetailsSlice = createSlice({
                 state.loading = false;
                 state.name = action.payload.name;
                 state.order = action.payload.order.number;
+                state.error = null;
             })
             .addCase(createOrder.rejected, (state, action) => {
                 state.loading = false;

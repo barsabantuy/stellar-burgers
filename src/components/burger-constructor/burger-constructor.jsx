@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import styles from './burger-constructor.module.css';
 import {Button, ConstructorElement, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
@@ -7,19 +7,18 @@ import { burgerConstructorActions } from "../../services/burger-constructor-slic
 import {useDispatch, useSelector} from "react-redux";
 import {useDrop} from "react-dnd";
 import ConstructorIngredient from "./constructor-ingredient";
+import {createOrder} from "../../services/order-details-slice";
 
 function BurgerConstructor() {
 
     const { isModalOpen, bun, ingredients } = useSelector(store => store.burgerConstructor);
-    const { ingredients: burgerIngredients } = useSelector(store => store.burgerIngredients);
+    const { loading, error, order } = useSelector(store => store.orderDetails);
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (!bun) {
-            const firstBun = burgerIngredients.filter(item => item.type === "bun")[0];
-            dispatch(burgerConstructorActions.setBun(firstBun));
-        }
-    }, [bun, burgerIngredients, dispatch]);
+    const handleCreateOrder = () => {
+        dispatch(createOrder([bun, ...ingredients, bun]));
+        openOrderModal();
+    }
 
     const openOrderModal = () => {
         dispatch(burgerConstructorActions.openModal());
@@ -27,11 +26,14 @@ function BurgerConstructor() {
 
     const closeModal = () => {
         dispatch(burgerConstructorActions.closeModal());
+        if (!loading && !error && order) {
+            dispatch(burgerConstructorActions.clearConstructor());
+        }
     }
 
     const [, drop] = useDrop({
         accept: 'ingredient',
-        drop: (item) => dispatch(burgerConstructorActions.addIngredient({ index: 0, item })),
+        drop: (item) => dispatch(burgerConstructorActions.addIngredient({ ...item })),
     });
 
     const totalPrice = useMemo(() => {
@@ -39,6 +41,17 @@ function BurgerConstructor() {
         const bunsPrice = bun ? bun.price * 2 : 0;
         return ingredientsPrice + bunsPrice;
     }, [ingredients, bun]);
+
+    if (!bun && (!ingredients || ingredients.length === 0)) {
+        return (
+            <section ref={drop} className={styles.emptyContainer}>
+                <h1 className="text text_type_main-large mt-4 mb-4">Начните собирать бургер!</h1>
+                <h2 className="text text_type_main-medium text_color_inactive mt-4 mb-4">Перенесите ингредиенты сюда</h2>
+            </section>
+        )
+    }
+
+    const canOrder = bun && (ingredients && ingredients.length !== 0);
 
     return (
         <div className={styles.container}>
@@ -77,12 +90,12 @@ function BurgerConstructor() {
                     {totalPrice}
                     <CurrencyIcon type="primary" />
                 </span>
-                <Button htmlType="button" type="primary" size="medium" onClick={openOrderModal}>
+                <Button disabled={!canOrder} htmlType="button" type="primary" size="medium" onClick={handleCreateOrder}>
                     Оформить заказ
                 </Button>
             </section>
             {isModalOpen &&
-                <Modal onClose={closeModal} root={document.getElementById('app')}>
+                <Modal onClose={closeModal} root={document.getElementById('modals')}>
                     <OrderDetails />
                 </Modal>}
         </div>

@@ -1,5 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { v4 as uuidv4 } from 'uuid';
+import { createSlice, nanoid } from '@reduxjs/toolkit';
 
 const burgerConstructorSlice = createSlice({
     name: 'burgerConstructor',
@@ -9,22 +8,23 @@ const burgerConstructorSlice = createSlice({
         isModalOpen: false
     },
     reducers: {
-        setBun: (state, action) => {
-            state.bun = action.payload;
+        addIngredient: {
+            reducer: (state, action) => {
+                const {item, index} = action.payload;
+                if (item.type === 'bun') {
+                    state.bun = item;
+                } else {
+                    state.ingredients.splice(index, 0, item);
+                }
+            },
+            prepare: (item, index = 0) => {
+                return { payload: { index, item: { ...item, uuid: nanoid() } } };
+            }
         },
         moveItem: (state, action) => {
             const { fromIndex, toIndex } = action.payload;
             const [movedItem] = state.ingredients.splice(fromIndex, 1);
             state.ingredients.splice(toIndex, 0, movedItem);
-        },
-        addIngredient: (state, action) => {
-            const { index, item } = action.payload;
-            const itemWithId = { ...item, uuid: uuidv4() };
-            if (item.type === 'bun') {
-                state.bun = itemWithId;
-            } else {
-                state.ingredients.splice(index, 0, itemWithId);
-            }
         },
         removeIngredient: (state, action) => {
             const { uuid } = action.payload;
@@ -38,6 +38,10 @@ const burgerConstructorSlice = createSlice({
         },
         closeModal: state => {
             state.isModalOpen = false;
+        },
+        clearConstructor: state => {
+            state.bun = null;
+            state.ingredients = [];
         }
     },
 });
