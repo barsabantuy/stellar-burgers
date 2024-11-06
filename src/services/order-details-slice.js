@@ -4,10 +4,9 @@ import { checkResponse } from '../utils';
 
 export const createOrder = createAsyncThunk(
     'orderDetails/createOrder',
-    async (ingredients, thunkAPI) => {
+    async (ingredients) => {
         return postOrder(ingredients)
-            .then(checkResponse)
-            .catch(error => thunkAPI.rejectWithValue(error.message));
+            .then(checkResponse);
     }
 );
 

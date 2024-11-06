@@ -4,10 +4,9 @@ import { checkResponse } from '../utils';
 
 export const fetchBurgerIngredients = createAsyncThunk(
     'burgerIngredients/fetchBurgerIngredients',
-    async (_, thunkAPI) => {
+    async () => {
         return fetchIngredients()
-            .then(checkResponse)
-            .catch(error => thunkAPI.rejectWithValue(error.message));
+            .then(checkResponse);
     }
 );
 
