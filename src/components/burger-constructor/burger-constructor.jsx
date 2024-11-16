@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import styles from './burger-constructor.module.css';
 import {Button, ConstructorElement, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
@@ -8,16 +8,31 @@ import {useDispatch, useSelector} from "react-redux";
 import {useDrop} from "react-dnd";
 import ConstructorIngredient from "./constructor-ingredient";
 import {createOrder} from "../../services/order-details-slice";
+import {useLocation, useNavigate} from "react-router-dom";
+import {getUser} from "../../services/auth-slice";
 
 function BurgerConstructor() {
 
+    const dispatch = useDispatch();
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const { user, loading: { getUser: userLoading } } = useSelector(store => store.auth);
+
+    useEffect(() => {
+        dispatch(getUser());
+    }, [dispatch]);
+
     const { isModalOpen, bun, ingredients } = useSelector(store => store.burgerConstructor);
     const { loading, error, order } = useSelector(store => store.orderDetails);
-    const dispatch = useDispatch();
 
     const handleCreateOrder = () => {
-        dispatch(createOrder([bun, ...ingredients, bun]));
-        openOrderModal();
+        if (!userLoading && !user) {
+            navigate("/login", { state: { from: location } });
+        } else {
+            dispatch(createOrder([bun, ...ingredients, bun]));
+            openOrderModal();
+        }
     }
 
     const openOrderModal = () => {
@@ -95,7 +110,7 @@ function BurgerConstructor() {
                 </Button>
             </section>
             {isModalOpen &&
-                <Modal onClose={closeModal} root={document.getElementById('modals')}>
+                <Modal onClose={closeModal}>
                     <OrderDetails />
                 </Modal>}
         </div>

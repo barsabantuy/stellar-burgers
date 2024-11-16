@@ -9,13 +9,17 @@ function OrderDetails() {
 
     if (loading) {
         return (
-            <h1>Loading...</h1>
+            <section className={styles.details}>
+                <h1>Оформляем...</h1>
+            </section>
         )
     }
 
     if (error) {
         return (
-            <h1>Error!</h1>
+            <section className={styles.details}>
+                <h1>Произошла ошибка!</h1>
+            </section>
         )
     }
 

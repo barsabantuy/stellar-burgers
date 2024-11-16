@@ -7,7 +7,9 @@ import PropTypes from "prop-types";
 
 function Modal(props) {
 
-    const { children, onClose, title, root } = props;
+    const { children, onClose } = props;
+
+    const root= document.getElementById('modals');
 
     useEffect(() => {
         const handleEscapeButtonPress = (e) => {
@@ -32,10 +34,6 @@ function Modal(props) {
     return ReactDOM.createPortal(
         <ModalOverlay onClick={handleOverlayClick}>
             <div className={styles.modal} onClick={handleModalClick}>
-                {title &&
-                    <header>
-                        <h2 className="text text_type_main-large mt-3 mb-1">{title}</h2>
-                    </header>}
                 <button className={styles.closeButton} onClick={onClose} aria-label="Close modal">
                     <CloseIcon type="primary" />
                 </button>
@@ -48,9 +46,7 @@ function Modal(props) {
 
 Modal.propTypes = {
     children: PropTypes.node,
-    onClose: PropTypes.func.isRequired,
-    title: PropTypes.string,
-    root: PropTypes.instanceOf(Element).isRequired
+    onClose: PropTypes.func.isRequired
 };
 
 export default Modal;

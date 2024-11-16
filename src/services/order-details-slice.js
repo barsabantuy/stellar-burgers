@@ -1,12 +1,10 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {postOrder} from "./api";
-import { checkResponse } from '../utils';
 
 export const createOrder = createAsyncThunk(
     'orderDetails/createOrder',
     async (ingredients) => {
-        return postOrder(ingredients)
-            .then(checkResponse);
+        return postOrder(ingredients);
     }
 );
 
