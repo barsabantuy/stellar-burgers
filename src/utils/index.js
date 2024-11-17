@@ -1,6 +1,5 @@
 export const checkResponse = response => {
-    if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();
+    return response.ok
+        ? response.json()
+        : response.json().then((err) => Promise.reject(err));
 }

@@ -1,13 +1,45 @@
 import React from 'react';
 import styles from './ingredient-details.module.css';
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 function IngredientDetails() {
 
-    const { currentIngredient: ingredient } = useSelector(store => store.ingredientDetails);
+    const { ingredientId } = useParams();
+
+    const { ingredients, loading, error } = useSelector(store => store.burgerIngredients);
+
+    if (loading) {
+        return (
+            <section className={styles.details}>
+                <h1>Загружаем...</h1>
+            </section>
+        );
+    }
+
+    if (error) {
+        return (
+            <section className={styles.details}>
+                <h1>Ошибка при загрузке ингредиента!</h1>
+            </section>
+        );
+    }
+
+    const ingredient = ingredients.find(item => item._id === ingredientId);
+
+    if (!ingredient) {
+        return (
+            <section className={styles.details}>
+                <h1>Ингредиент не найден!</h1>
+            </section>
+        );
+    }
 
     return (
         <section className={styles.details}>
+            <header>
+                <h2 className="text text_type_main-large mt-3 mb-1">Детали ингредиента</h2>
+            </header>
             <img src={ingredient.image_large} alt={ingredient.name} className={styles.image}/>
             <h1 className="text text_type_main-medium mt-4">{ingredient.name}</h1>
             <ul className={styles.nutrients}>

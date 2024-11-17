@@ -1,11 +1,11 @@
-.appContainer {
+.container {
     display: grid;
     grid-template-rows: auto 1fr;
     justify-items: center;
     min-height: 100vh;
 }
 
-.mainContent {
+.content {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;

@@ -1,6 +1,8 @@
 import React from 'react';
 import styles from './app-header.module.css';
 import { BurgerIcon, ListIcon, Logo, ProfileIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import {Link, NavLink} from "react-router-dom";
+import commonStyles from "../../pages/common.module.css";
 
 function AppHeader() {
     return (
@@ -8,24 +10,44 @@ function AppHeader() {
             <header className={styles.appHeader}>
                 <nav className={styles.leftNav}>
                     <ul className={styles.menu}>
-                        <li className={styles.item}>
-                            <BurgerIcon type="primary" />
-                            <span className="text text_type_main-small">Конструктор</span>
+                        <li>
+                            <NavLink to='/' className={`${styles.item} ${commonStyles.link}`}>
+                                {({isActive}) => (<>
+                                    <BurgerIcon type="primary" />
+                                    <span className={`text text_type_main-small ${!isActive ? 'text_color_inactive' : ''}`}>
+                                        Конструктор
+                                    </span>
+                                </>)}
+                            </NavLink>
                         </li>
-                        <li className={styles.item}>
-                            <ListIcon type="primary" />
-                            <span className="text text_type_main-small text_color_inactive">Лента заказов</span>
+                        <li>
+                            <NavLink to='/feed' className={`${styles.item} ${commonStyles.link}`}>
+                                {({isActive}) => (<>
+                                    <ListIcon type="primary" />
+                                    <span className={`text text_type_main-small ${!isActive ? 'text_color_inactive' : ''}`}>
+                                        Лента заказов
+                                    </span>
+                                </>)}
+                            </NavLink>
                         </li>
                     </ul>
                 </nav>
                 <div className={styles.logoContainer}>
-                    <Logo />
+                    <Link to='/' className={commonStyles.link}>
+                        <Logo />
+                    </Link>
                 </div>
                 <nav className={styles.rightNav}>
                     <ul className={styles.menuRight}>
-                        <li className={styles.profile}>
-                            <ProfileIcon type="primary" />
-                            <span className="text text_type_main-small text_color_inactive">Личный кабинет</span>
+                        <li>
+                            <NavLink to='/profile' className={`${styles.profile} ${commonStyles.link}`}>
+                                {({isActive}) => (<>
+                                    <ProfileIcon type="primary" />
+                                    <span className={`text text_type_main-small ${!isActive ? 'text_color_inactive' : ''}`}>
+                                        Личный кабинет
+                                    </span>
+                                </>)}
+                            </NavLink>
                         </li>
                     </ul>
                 </nav>

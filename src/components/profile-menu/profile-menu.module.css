@@ -1,0 +1,19 @@
+.menu {
+    margin-bottom: 80px;
+}
+
+.menuList {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+}
+
+.menuItem {
+    display: block;
+    padding: 12px 0;
+}
+
+.menuLink {
+    text-decoration: none;
+}
