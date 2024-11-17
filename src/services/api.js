@@ -2,70 +2,69 @@ import { checkResponse } from '../utils';
 
 const DOMAIN = 'https://norma.nomoreparties.space';
 
+const request = async (path, options) => {
+    return fetch(`${DOMAIN}/${path}`, options)
+        .then(checkResponse)
+}
+
 export const fetchIngredients = async () => {
-    return fetch(`${DOMAIN}/api/ingredients`)
-        .then(checkResponse);
+    return request('api/ingredients');
 }
 
 export const postOrder = async (ingredients) => {
-    return fetch(`${DOMAIN}/api/orders`, {
+    return request('api/orders', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ ingredients: [...ingredients] })
     })
-        .then(checkResponse)
 }
 
 export const registerRequest = async form => {
-    return fetch(`${DOMAIN}/api/auth/register`, {
+    return request('api/auth/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(form)
     })
-        .then(checkResponse)
         .then(saveTokens)
 }
 
 export const loginRequest = async form => {
-    return fetch(`${DOMAIN}/api/auth/login`, {
+    return request('api/auth/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(form)
     })
-        .then(checkResponse)
         .then(saveTokens)
 }
 
 export const forgotPasswordRequest = async form => {
-    return fetch(`${DOMAIN}/api/password-reset`, {
+    return request('api/password-reset', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(form)
     })
-        .then(checkResponse)
 }
 
 export const resetPasswordRequest = async form => {
-    return fetch(`${DOMAIN}/api/password-reset/reset`, {
+    return request('api/password-reset/reset', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(form)
     })
-        .then(checkResponse)
 }
 
 export const refreshToken = async () => {
-    return fetch(`${DOMAIN}/auth/token`, {
+    return request('auth/token', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
@@ -74,7 +73,6 @@ export const refreshToken = async () => {
             token: localStorage.getItem('refreshToken'),
         }),
     })
-        .then(checkResponse)
         .then(saveTokens);
 };
 
@@ -128,7 +126,7 @@ export const updateUserRequest = form => fetchWithRefresh(`${DOMAIN}/api/auth/us
 })
 
 export const logoutRequest = async () => {
-    return fetch(`${DOMAIN}/api/auth/logout`, {
+    return request('api/auth/logout', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -137,6 +135,5 @@ export const logoutRequest = async () => {
             token: localStorage.getItem('refreshToken'),
         }),
     })
-        .then(checkResponse)
         .then(deleteTokens)
 }

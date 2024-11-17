@@ -1,22 +1,19 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import styles from './auth.module.css';
 import commonStyles from './common.module.css';
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Navigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUser, login } from '../services/auth-slice';
+import { login } from '../services/auth-slice';
+import useForm from "../hooks/useForm";
 
 function LoginPage() {
 
     const dispatch = useDispatch();
     const location = useLocation();
 
-    useEffect(() => {
-        dispatch(getUser());
-    }, [dispatch]);
-
     const { user, loading } = useSelector(store => store.auth);
-    const [ form, setValue ] = useState({ email: '', password: '' });
+    const { form, handleChange } = useForm({ email: '', password: '' });
 
     const handleLogin = useCallback(e => {
         e.preventDefault();
@@ -25,14 +22,10 @@ function LoginPage() {
         }
     }, [dispatch, form]);
 
-    const onChange = e => {
-        setValue({ ...form, [e.target.name]: e.target.value });
-    };
-
-    if (loading.getUser || loading.login) {
+    if (loading.login) {
         return (
             <main className={styles.container}>
-                <h1 className='text text_type_main-medium mb-3'>Загружаю...</h1>
+                <h1 className='text text_type_main-medium mb-3'>Входим...</h1>
             </main>
         )
     }
@@ -55,14 +48,14 @@ function LoginPage() {
                 <form onSubmit={handleLogin} className={styles.form}>
                     <EmailInput
                         value={form.email}
-                        onChange={onChange}
+                        onChange={handleChange}
                         extraClass={styles.input}
                         placeholder='E-mail'
                         name={'email'}
                     />
                     <PasswordInput
                         value={form.password}
-                        onChange={onChange}
+                        onChange={handleChange}
                         extraClass={styles.input}
                         placeholder='Пароль'
                         name={'password'}

@@ -19,7 +19,7 @@ import IngredientDetails from "../ingredient-details/ingredient-details";
 import AppHeader from "../app-header/app-header";
 import { fetchBurgerIngredients } from "../../services/burger-ingredients-slice";
 import { useDispatch } from "react-redux";
-import { ProtectedRouteElement } from "../protected-route-element/protected-route-element";
+import ProtectedRoute from "../protected-route";
 
 function App() {
 
@@ -42,13 +42,13 @@ function App() {
             <AppHeader />
             <Routes location={background || location}>
                 <Route path='/' element={<HomePage />} />
-                <Route path='/profile' element={<ProtectedRouteElement element={<ProfilePage />} />} />
-                <Route path='/profile/orders' element={<ProtectedRouteElement element={<OrdersPage />} />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/logout" element={<LogoutPage />} />
-                <Route path="/register" element={<RegistrationPage />} />
-                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                <Route path="/reset-password" element={<ResetPasswordPage />} />
+                <Route path='/profile' element={<ProtectedRoute element={<ProfilePage />} />} />
+                <Route path='/profile/orders' element={<ProtectedRoute element={<OrdersPage />} />} />
+                <Route path='/logout' element={<ProtectedRoute element={<LogoutPage />} />} />
+                <Route path='/login' element={<ProtectedRoute anonymous={true} element={<LoginPage />} />} />
+                <Route path='/register' element={<ProtectedRoute anonymous={true} element={<RegistrationPage />} />} />
+                <Route path='/forgot-password' element={<ProtectedRoute anonymous={true} element={<ForgotPasswordPage />} />} />
+                <Route path='/reset-password' element={<ProtectedRoute anonymous={true} element={<ResetPasswordPage />} />} />
                 <Route path="/ingredients/:ingredientId" element={<IngredientDetailsPage />} />
                 <Route path="*" element={<NotFound404 />} />
             </Routes>

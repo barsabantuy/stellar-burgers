@@ -3,8 +3,9 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../../services/auth-slice';
 import styles from '../../pages/common.module.css';
+import PropTypes from "prop-types";
 
-export function ProtectedRouteElement({ element }) {
+function ProtectedRoute({ element, anonymous = false }) {
 
     const dispatch = useDispatch();
     const location = useLocation();
@@ -14,7 +15,6 @@ export function ProtectedRouteElement({ element }) {
     useEffect(() => {
         dispatch(getUser());
     }, [dispatch]);
-
 
     if (loading.getUser) {
         return (
@@ -26,9 +26,23 @@ export function ProtectedRouteElement({ element }) {
         )
     }
 
-    if (user) {
-        return element;
+    const isLoggedIn = !loading.getUser && user;
+    const from = location.state?.from || '/';
+
+    if (anonymous && isLoggedIn) {
+        return <Navigate to={ from } />;
     }
 
-    return <Navigate to='/login' replace state={{ from: location }} />;
+    if (!anonymous && !isLoggedIn) {
+        return <Navigate to="/login" state={{ from: location }}/>;
+    }
+
+    return element;
 }
+
+ProtectedRoute.propTypes = {
+    element: PropTypes.node.isRequired,
+    anonymous: PropTypes.bool
+}
+
+export default ProtectedRoute;

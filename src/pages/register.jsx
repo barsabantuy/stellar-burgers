@@ -1,48 +1,37 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import styles from './auth.module.css';
 import commonStyle from './common.module.css';
 import { Button, EmailInput, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, Navigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { register, getUser } from '../services/auth-slice';
+import { Link } from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
+import { register } from '../services/auth-slice';
+import useForm from "../hooks/useForm";
 
 function RegistrationPage() {
 
     const dispatch = useDispatch();
+    const { loading } = useSelector(store => store.auth);
 
-    useEffect(() => {
-        dispatch(getUser());
-    }, [dispatch]);
-
-    const { user, loading } = useSelector(store => store.auth);
-    const [ form, setValue ] = useState({ name: '', email: '', password: '' });
+    const { form, handleChange } = useForm({ name: '', email: '', password: '' });
 
     const handleRegister = useCallback(e => {
         e.preventDefault();
-        dispatch(register(form));
+        if (!isEmptyForm) {
+            dispatch(register(form));
+        }
     }, [dispatch, form]);
 
-    const onChange = e => {
-        setValue({ ...form, [e.target.name]: e.target.value });
-    };
-
-    if (loading.getUser || loading.register) {
+    if (loading.register) {
         return (
             <main className={styles.container}>
                 <section className={styles.content}>
-                    <h1 className='text text_type_main-medium mb-3'>Загружаю...</h1>
+                    <h1 className='text text_type_main-medium mb-3'>Регистрируем...</h1>
                 </section>
             </main>
         )
     }
 
-    if (user) {
-        return (
-            <Navigate to='/' replace />
-        );
-    }
-
-    const isEmptyForm = form.email === '' || form.password === '' || form.password === '';
+    const isEmptyForm = form.name === '' || form.email === '' || form.password === '';
 
     return (
         <main className={styles.container}>
@@ -53,7 +42,7 @@ function RegistrationPage() {
                 <form onSubmit={handleRegister} className={styles.form}>
                     <Input
                         value={form.name}
-                        onChange={onChange}
+                        onChange={handleChange}
                         extraClass={styles.input}
                         placeholder={'Имя'}
                         type={'text'}
@@ -61,14 +50,14 @@ function RegistrationPage() {
                     />
                     <EmailInput
                         value={form.email}
-                        onChange={onChange}
+                        onChange={handleChange}
                         extraClass={styles.input}
                         placeholder='E-mail'
                         name={'email'}
                     />
                     <PasswordInput
                         value={form.password}
-                        onChange={onChange}
+                        onChange={handleChange}
                         extraClass={styles.input}
                         placeholder='Пароль'
                         name={'password'}

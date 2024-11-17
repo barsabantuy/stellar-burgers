@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import styles from './profile.module.css';
 import { Button, EmailInput, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import ProfileMenu from '../components/profile-menu/profile-menu';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from '../services/auth-slice';
-import { Navigate } from 'react-router-dom';
+import useForm from "../hooks/useForm";
 
 function ProfilePage() {
 
@@ -12,11 +12,7 @@ function ProfilePage() {
 
     const { user } = useSelector(store => store.auth);
 
-    const [ form, setValue ] = useState({
-        name: '',
-        email: '',
-        password: ''
-    });
+    const { form, handleChange, setValue } = useForm({ name: '', email: '', password: '' });
 
     useEffect(() => {
         if (user) {
@@ -46,16 +42,6 @@ function ProfilePage() {
         }
     }, [user]);
 
-    const onChange = e => {
-        setValue({ ...form, [e.target.name]: e.target.value });
-    };
-
-    if (!user) {
-        return (
-            <Navigate to='/login' />
-        );
-    }
-
     const isEmptyForm = form.name === '' || form.email === '';
     const dataChanged = form.name !== user.name || form.email !== user.email;
     const passwordNotEmpty = form.password !== '';
@@ -73,7 +59,7 @@ function ProfilePage() {
                 <form onSubmit={handleUpdateUser} className={styles.form}>
                     <Input
                         value={form.name}
-                        onChange={onChange}
+                        onChange={handleChange}
                         extraClass={styles.input}
                         placeholder={'Имя'}
                         type={'text'}
@@ -83,7 +69,7 @@ function ProfilePage() {
                     />
                     <EmailInput
                         value={form.email}
-                        onChange={onChange}
+                        onChange={handleChange}
                         extraClass={styles.input}
                         placeholder='E-mail'
                         name={'email'}
@@ -92,7 +78,7 @@ function ProfilePage() {
                     />
                     <PasswordInput
                         value={form.password}
-                        onChange={onChange}
+                        onChange={handleChange}
                         extraClass={styles.input}
                         placeholder='Пароль'
                         name={'password'}

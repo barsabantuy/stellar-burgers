@@ -22,10 +22,7 @@ export const login = createAsyncThunk(
 );
 
 export const getUser = createAsyncThunk(
-    'auth/getUser',
-    async () => {
-        return getUserRequest();
-    }
+    'auth/getUser', getUserRequest
 );
 
 export const updateUser = createAsyncThunk(
@@ -36,10 +33,7 @@ export const updateUser = createAsyncThunk(
 );
 
 export const logout = createAsyncThunk(
-    'auth/logout',
-    async () => {
-        return logoutRequest();
-    }
+    'auth/logout', logoutRequest
 );
 
 const initialState = {
