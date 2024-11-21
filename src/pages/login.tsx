@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, {FC, SyntheticEvent, useCallback} from 'react';
 import styles from './auth.module.css';
 import commonStyles from './common.module.css';
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -7,17 +7,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../services/auth-slice';
 import useForm from "../hooks/useForm";
 
-function LoginPage() {
+const LoginPage: FC = () => {
 
     const dispatch = useDispatch();
     const location = useLocation();
 
+    // @ts-ignore
     const { user, loading } = useSelector(store => store.auth);
     const { form, handleChange } = useForm({ email: '', password: '' });
 
-    const handleLogin = useCallback(e => {
+    const handleLogin = useCallback((e: SyntheticEvent) => {
         e.preventDefault();
         if (!isEmptyForm) {
+            // @ts-ignore
             dispatch(login(form));
         }
     }, [dispatch, form]);

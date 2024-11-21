@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { FC } from 'react';
 import styles from './ingredient-details.module.css';
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { TIngredient } from "../../types";
 
-function IngredientDetails() {
+const IngredientDetails: FC = () => {
 
     const { ingredientId } = useParams();
 
+    // @ts-ignore
     const { ingredients, loading, error } = useSelector(store => store.burgerIngredients);
 
     if (loading) {
@@ -25,7 +27,7 @@ function IngredientDetails() {
         );
     }
 
-    const ingredient = ingredients.find(item => item._id === ingredientId);
+    const ingredient = ingredients.find((item: TIngredient) => item._id === ingredientId);
 
     if (!ingredient) {
         return (

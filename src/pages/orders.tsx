@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { FC } from 'react';
 import styles from './profile.module.css';
 import ProfileMenu from '../components/profile-menu/profile-menu';
 
-function OrdersPage() {
+const OrdersPage: FC = () => {
     return (
         <main className={styles.container}>
             <section className={styles.content}>

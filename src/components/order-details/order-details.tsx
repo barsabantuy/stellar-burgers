@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { FC } from 'react';
 import styles from './order-details.module.css';
-import {CheckMarkIcon} from "@ya.praktikum/react-developer-burger-ui-components";
-import {useSelector} from "react-redux";
+import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import { useSelector } from "react-redux";
 
-function OrderDetails() {
+const OrderDetails: FC = () => {
 
+    // @ts-ignore
     const { order, loading, error } = useSelector(store => store.orderDetails);
 
     if (loading) {

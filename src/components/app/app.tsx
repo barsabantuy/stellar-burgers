@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 
 import {
@@ -20,18 +20,20 @@ import AppHeader from "../app-header/app-header";
 import { fetchBurgerIngredients } from "../../services/burger-ingredients-slice";
 import { useDispatch } from "react-redux";
 import ProtectedRoute from "../protected-route";
+import type { Location } from "@remix-run/router";
 
-function App() {
+const App: FC = () => {
 
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     useEffect(() => {
+        // @ts-ignore
         dispatch(fetchBurgerIngredients());
     }, [dispatch]);
 
-    const background = location.state && location.state.background;
+    const background: Partial<Location> | string = location.state && location.state.background;
 
     const handleModalClose = () => {
         navigate(-1);

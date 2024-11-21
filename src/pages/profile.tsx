@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { FC, SyntheticEvent, useCallback, useEffect } from 'react';
 import styles from './profile.module.css';
 import { Button, EmailInput, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import ProfileMenu from '../components/profile-menu/profile-menu';
@@ -6,10 +6,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from '../services/auth-slice';
 import useForm from "../hooks/useForm";
 
-function ProfilePage() {
+const ProfilePage: FC = () => {
 
     const dispatch = useDispatch();
 
+    // @ts-ignore
     const { user } = useSelector(store => store.auth);
 
     const { form, handleChange, setValue } = useForm({ name: '', email: '', password: '' });
@@ -24,14 +25,21 @@ function ProfilePage() {
         }
     }, [user]);
 
-    const handleUpdateUser = useCallback(e => {
+    const inputRef = React.useRef<HTMLInputElement>(null)
+
+    const onIconClick = () => {
+        inputRef?.current?.focus();
+    }
+
+    const handleUpdateUser = useCallback((e: SyntheticEvent) => {
         e.preventDefault();
         if (canSubmit) {
+            // @ts-ignore
             dispatch(updateUser(form));
         }
     }, [dispatch, form]);
 
-    const handleReset = useCallback(e => {
+    const handleReset = useCallback((e: SyntheticEvent) => {
         e.preventDefault();
         if (user) {
             setValue({
@@ -65,7 +73,10 @@ function ProfilePage() {
                         type={'text'}
                         name={'name'}
                         icon={'EditIcon'}
-                        isIcon={true}
+                        ref={inputRef}
+                        onIconClick={onIconClick}
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
                     />
                     <EmailInput
                         value={form.email}
@@ -73,7 +84,6 @@ function ProfilePage() {
                         extraClass={styles.input}
                         placeholder='E-mail'
                         name={'email'}
-                        icon={'EditIcon'}
                         isIcon={true}
                     />
                     <PasswordInput
@@ -83,7 +93,6 @@ function ProfilePage() {
                         placeholder='Пароль'
                         name={'password'}
                         icon={'EditIcon'}
-                        isIcon={true}
                     />
                     {canSubmit &&
                         <div>

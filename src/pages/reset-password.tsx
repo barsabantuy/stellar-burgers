@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, {FC, SyntheticEvent, useCallback} from 'react';
 import styles from './auth.module.css';
 import commonStyles from './common.module.css';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -7,19 +7,27 @@ import { useDispatch, useSelector } from 'react-redux';
 import { resetPassword } from '../services/password-reset-slice';
 import useForm from "../hooks/useForm";
 
-function ResetPasswordPage() {
+const ResetPasswordPage: FC = () => {
 
     const dispatch = useDispatch();
 
+    // @ts-ignore
     const { loading, tokenRequested } = useSelector(store => store.passwordReset);
     const { form, handleChange } = useForm({ password: '', token: '' });
 
-    const handleResetPassword = useCallback(e => {
+    const handleResetPassword = useCallback((e: SyntheticEvent) => {
         e.preventDefault();
         if (!isEmptyForm) {
+            // @ts-ignore
             dispatch(resetPassword(form));
         }
     }, [dispatch, form]);
+
+    const inputRef = React.useRef<HTMLInputElement>(null)
+
+    const onIconClick = () => {
+        inputRef?.current?.focus();
+    }
 
     if (loading.resetPassword) {
         return (
@@ -61,6 +69,10 @@ function ResetPasswordPage() {
                         placeholder='Введите код из письма'
                         type={'text'}
                         extraClass={styles.input}
+                        ref={inputRef}
+                        onIconClick={onIconClick}
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
                     />
                     <Button onClick={handleResetPassword} htmlType='submit' type='primary' size='medium'
                             extraClass={styles.button} disabled={isEmptyForm}>

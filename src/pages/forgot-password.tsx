@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { FC, SyntheticEvent, useCallback } from 'react';
 import styles from './auth.module.css';
 import commonStyles from './common.module.css';
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -7,16 +7,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { forgotPassword } from '../services/password-reset-slice';
 import useForm from "../hooks/useForm";
 
-function ForgotPasswordPage() {
+const ForgotPasswordPage: FC = () => {
 
     const dispatch = useDispatch();
 
+    // @ts-ignore
     const { loading, tokenRequested } = useSelector(store => store.passwordReset);
     const { form, handleChange } = useForm({ email: '' });
 
-    const handleForgotPassword = useCallback(e => {
+    const handleForgotPassword = useCallback((e: SyntheticEvent) => {
         e.preventDefault();
         if (!isEmptyForm) {
+            // @ts-ignore
             dispatch(forgotPassword(form));
         }
     }, [dispatch, form]);

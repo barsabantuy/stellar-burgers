@@ -1,19 +1,23 @@
-import React, {useRef} from "react";
+import React, {FC, useRef} from "react";
 import {useDrag, useDrop} from "react-dnd";
 import {useDispatch} from "react-redux";
 import { burgerConstructorActions } from "../../services/burger-constructor-slice";
 import styles from "./burger-constructor.module.css";
 import {ConstructorElement, DragIcon} from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
-import ingredientPropType from "../../utils/types";
+import {TIngredientItem} from "../../types";
 
-function ConstructorIngredient({ item, index }) {
+interface IConstructorIngredient {
+    item: TIngredientItem;
+    index: number;
+}
+
+const ConstructorIngredient: FC<IConstructorIngredient> = ({ item, index }) => {
 
     const dispatch = useDispatch();
 
     const ref = useRef(null);
 
-    const [, drop] = useDrop({
+    const [, drop] = useDrop<IConstructorIngredient>({
         accept: 'constructor-ingredient',
         collect: (monitor) => ({
             isOver: monitor.isOver(),
@@ -51,7 +55,6 @@ function ConstructorIngredient({ item, index }) {
             <DragIcon type="primary" />
             <ConstructorElement
                 handleClose={handleClose}
-                type={item.type}
                 isLocked={false}
                 text={item.name}
                 price={item.price}
@@ -60,10 +63,5 @@ function ConstructorIngredient({ item, index }) {
         </div>
     );
 }
-
-ConstructorIngredient.propTypes = {
-    index: PropTypes.number.isRequired,
-    item: ingredientPropType.isRequired,
-};
 
 export default ConstructorIngredient;

@@ -1,18 +1,24 @@
 import { Navigate, useLocation } from 'react-router-dom';
-import React, { useEffect } from 'react';
+import React, {FC, useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../../services/auth-slice';
 import styles from '../../pages/common.module.css';
-import PropTypes from "prop-types";
 
-function ProtectedRoute({ element, anonymous = false }) {
+interface IProtectedRoute {
+    element: React.ReactElement;
+    anonymous?: boolean;
+}
+
+const ProtectedRoute: FC<IProtectedRoute> = ({ element, anonymous = false }) => {
 
     const dispatch = useDispatch();
     const location = useLocation();
 
+    // @ts-ignore
     const { user, loading } = useSelector(store => store.auth);
 
     useEffect(() => {
+        // @ts-ignore
         dispatch(getUser());
     }, [dispatch]);
 
@@ -38,11 +44,6 @@ function ProtectedRoute({ element, anonymous = false }) {
     }
 
     return element;
-}
-
-ProtectedRoute.propTypes = {
-    element: PropTypes.node.isRequired,
-    anonymous: PropTypes.bool
 }
 
 export default ProtectedRoute;

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, {FC, SyntheticEvent, useCallback} from 'react';
 import styles from './auth.module.css';
 import commonStyle from './common.module.css';
 import { Button, EmailInput, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -7,16 +7,24 @@ import {useDispatch, useSelector} from 'react-redux';
 import { register } from '../services/auth-slice';
 import useForm from "../hooks/useForm";
 
-function RegistrationPage() {
+const RegistrationPage: FC = () => {
 
     const dispatch = useDispatch();
+    // @ts-ignore
     const { loading } = useSelector(store => store.auth);
 
     const { form, handleChange } = useForm({ name: '', email: '', password: '' });
 
-    const handleRegister = useCallback(e => {
+    const inputRef = React.useRef<HTMLInputElement>(null)
+
+    const onIconClick = () => {
+        inputRef?.current?.focus();
+    }
+
+    const handleRegister = useCallback((e: SyntheticEvent) => {
         e.preventDefault();
         if (!isEmptyForm) {
+            // @ts-ignore
             dispatch(register(form));
         }
     }, [dispatch, form]);
@@ -47,6 +55,10 @@ function RegistrationPage() {
                         placeholder={'Имя'}
                         type={'text'}
                         name={'name'}
+                        ref={inputRef}
+                        onIconClick={onIconClick}
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
                     />
                     <EmailInput
                         value={form.email}

@@ -1,13 +1,17 @@
 import {Counter, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "../burger-ingredients/burger-ingredients.module.css";
 import commonStyles from "../../pages/common.module.css";
-import React from "react";
+import React, {FC} from "react";
 import {useDrag} from "react-dnd";
-import PropTypes from "prop-types";
-import ingredientPropType from "../../utils/types";
 import {Link, useLocation} from "react-router-dom";
+import {TIngredient} from "../../types";
 
-function Ingredient({ item, counter }) {
+interface IIngredient {
+    item: TIngredient;
+    counter: number;
+}
+
+const Ingredient: FC<IIngredient> = ({ item, counter }) => {
 
     const location = useLocation();
     const ingredientId = item['_id'];
@@ -42,10 +46,5 @@ function Ingredient({ item, counter }) {
         </Link>
     );
 }
-
-Ingredient.propTypes = {
-    item: ingredientPropType.isRequired,
-    counter: PropTypes.number
-};
 
 export default Ingredient;

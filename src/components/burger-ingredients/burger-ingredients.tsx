@@ -1,23 +1,28 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, {FC, MutableRefObject, useCallback, useEffect, useMemo, useRef} from 'react';
 import styles from './burger-ingredients.module.css';
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useDispatch, useSelector } from "react-redux";
 import { burgerIngredientsActions } from "../../services/burger-ingredients-slice"
 import { useInView } from "react-intersection-observer";
 import Ingredient from "./ingredient";
+import {TIngredient} from "../../types";
 
-function BurgerIngredients() {
+const THRESHOLD: number = 0.1;
 
-    const bunsRef = useRef(null);
-    const saucesRef = useRef(null);
-    const mainsRef = useRef(null);
+const BurgerIngredients: FC = () => {
 
-    const [bunsInViewRef, bunsInView] = useInView({ threshold: 0.1 });
-    const [saucesInViewRef, saucesInView] = useInView({ threshold: 0.1 });
-    const [mainsInViewRef, mainsInView] = useInView({ threshold: 0.1 });
+    const bunsRef = useRef<HTMLElement | null>(null);
+    const saucesRef = useRef<HTMLElement | null>(null);
+    const mainsRef = useRef<HTMLElement | null>(null);
+
+    const [bunsInViewRef, bunsInView] = useInView({ threshold: THRESHOLD });
+    const [saucesInViewRef, saucesInView] = useInView({ threshold: THRESHOLD });
+    const [mainsInViewRef, mainsInView] = useInView({ threshold: THRESHOLD });
     const dispatch = useDispatch();
 
-    const sections = [
+    const sections: ReadonlyArray<{
+        name: string, id: string, ref: MutableRefObject<any>, refInView: (node: HTMLElement) => void
+    }> = [
         { name: 'Булки', id: 'bun', ref: bunsRef, refInView: bunsInViewRef },
         { name: 'Соусы', id: 'sauce', ref: saucesRef, refInView: saucesInViewRef },
         { name: 'Начинки', id: 'main', ref: mainsRef, refInView: mainsInViewRef }
@@ -34,18 +39,28 @@ function BurgerIngredients() {
     }, [bunsInView, saucesInView, mainsInView, dispatch]);
 
     const setRefs = useCallback(
-        (node, ref, inViewRef) => {
-            ref.current = node;
+        <T extends HTMLElement>(
+            node: T,
+            ref: MutableRefObject<T>,
+            inViewRef: (node: T) => void
+        ) => {
+            if (ref) {
+                ref.current = node;
+            }
             inViewRef(node);
-        },[],
+        }, []
     );
 
+    // @ts-ignore
     const {ingredients, activeSection } = useSelector(store => store.burgerIngredients);
+    // @ts-ignore
     const { bun, ingredients: constructorIngredients } = useSelector(store => store.burgerConstructor);
 
     const usedIngredientsCounter = useMemo(() => {
-        const counter = {};
-        constructorIngredients.forEach(ingredient => {
+        const counter: {
+            [key: string]: number;
+        } = {};
+        constructorIngredients.forEach((ingredient: TIngredient) => {
             counter[ingredient._id] = (counter[ingredient._id] || 0) + 1;
         });
         if (bun) {
@@ -54,8 +69,8 @@ function BurgerIngredients() {
         return counter;
     }, [bun, constructorIngredients]);
 
-    const filterIngredientsByType = type => {
-        return ingredients && ingredients.filter(item => item.type === type);
+    const filterIngredientsByType = (type: string): ReadonlyArray<TIngredient> => {
+        return ingredients?.filter((item: TIngredient) => item.type === type);
     }
 
     return (
@@ -77,7 +92,7 @@ function BurgerIngredients() {
             <div className={styles.article}>
                 {sections.map(section => (
                     <section className={styles.ingredients} id={section.id}
-                             ref={el => setRefs(el, section.ref, section.refInView)}
+                             ref={(el: HTMLElement) => setRefs(el, section.ref, section.refInView)}
                              key={section.id}>
                         <h2 className="text text_type_main-medium">{section.name}</h2>
                         <ul className={styles.itemList}>

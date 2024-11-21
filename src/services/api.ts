@@ -1,17 +1,31 @@
 import { checkResponse } from '../utils';
+import {TForm, TIngredient, TOrder, TUser} from "../types";
 
 const DOMAIN = 'https://norma.nomoreparties.space';
 
-const request = async (path, options) => {
-    return fetch(`${DOMAIN}/${path}`, options)
-        .then(checkResponse)
+type TBaseApiResponse = {
+    success: boolean;
+    message?: string;
+    headers?: Headers;
+};
+
+type TApiResponse<T = {}> = TBaseApiResponse & T;
+
+type TTokenApiResponse<T> = TApiResponse<T> & {
+    refreshToken: string;
+    accessToken: string;
 }
 
-export const fetchIngredients = async () => {
+const request = async (path: string, options?: RequestInit): Promise<any> => {
+    return fetch(`${DOMAIN}/${path}`, options)
+        .then(checkResponse);
+};
+
+export const fetchIngredients = async (): Promise<TApiResponse & { data: TIngredient }> => {
     return request('api/ingredients');
 }
 
-export const postOrder = async (ingredients) => {
+export const postOrder = async (ingredients: ReadonlyArray<string>): Promise<TApiResponse & TOrder> => {
     return request('api/orders', {
         method: 'POST',
         headers: {
@@ -21,7 +35,7 @@ export const postOrder = async (ingredients) => {
     })
 }
 
-export const registerRequest = async form => {
+export const registerRequest = async (form: TForm): Promise<TTokenApiResponse<TUser>> => {
     return request('api/auth/register', {
         method: 'POST',
         headers: {
@@ -32,7 +46,8 @@ export const registerRequest = async form => {
         .then(saveTokens)
 }
 
-export const loginRequest = async form => {
+
+export const loginRequest = async (form: TForm): Promise<TTokenApiResponse<TUser>> => {
     return request('api/auth/login', {
         method: 'POST',
         headers: {
@@ -43,7 +58,16 @@ export const loginRequest = async form => {
         .then(saveTokens)
 }
 
-export const forgotPasswordRequest = async form => {
+const saveTokens = (response: TTokenApiResponse<any>): TTokenApiResponse<any> => {
+    if (!response.success) {
+        return Promise.reject(response);
+    }
+    localStorage.setItem('refreshToken', response.refreshToken);
+    localStorage.setItem('accessToken', response.accessToken);
+    return response;
+}
+
+export const forgotPasswordRequest = async (form: TForm): Promise<TApiResponse> => {
     return request('api/password-reset', {
         method: 'POST',
         headers: {
@@ -53,7 +77,7 @@ export const forgotPasswordRequest = async form => {
     })
 }
 
-export const resetPasswordRequest = async form => {
+export const resetPasswordRequest = async (form: TForm): Promise<TApiResponse> => {
     return request('api/password-reset/reset', {
         method: 'POST',
         headers: {
@@ -63,7 +87,7 @@ export const resetPasswordRequest = async form => {
     })
 }
 
-export const refreshToken = async () => {
+export const refreshToken = async (): Promise<TTokenApiResponse<any>> => {
     return request('auth/token', {
         method: 'POST',
         headers: {
@@ -76,15 +100,21 @@ export const refreshToken = async () => {
         .then(saveTokens);
 };
 
-export const fetchWithRefresh = async (url, options) => {
+export const fetchWithRefresh = async (url: string, options: any): Promise<any> => {
     try {
         const res = await fetch(url, options);
         return await checkResponse(res);
-    } catch (err) {
+    } catch (err: any) {
         if (err.message === 'jwt expired') {
             const refreshData = await refreshToken();
-            options.headers.authorization = refreshData.accessToken;
-            const res = await fetch(url, options);
+            const newOptions = {
+                ...options,
+                headers: {
+                    ...options.headers,
+                    authorization: refreshData.accessToken
+                },
+            };
+            const res = await fetch(url, newOptions);
             return await checkResponse(res);
         } else {
             return Promise.reject(err);
@@ -92,21 +122,12 @@ export const fetchWithRefresh = async (url, options) => {
     }
 };
 
-const saveTokens = response => {
+const deleteTokens = (response: TBaseApiResponse) => {
     if (!response.success) {
         return Promise.reject(response);
     }
-    localStorage.setItem('refreshToken', response.refreshToken);
-    localStorage.setItem('accessToken', response.accessToken);
-    return response;
-}
-
-const deleteTokens = response => {
-    if (!response.success) {
-        return Promise.reject(response);
-    }
-    localStorage.setItem('refreshToken', null);
-    localStorage.setItem('accessToken', null);
+    localStorage.setItem('refreshToken', '');
+    localStorage.setItem('accessToken', '');
     return response;
 }
 
@@ -117,7 +138,7 @@ export const getUserRequest = () => fetchWithRefresh(`${DOMAIN}/api/auth/user`, 
     },
 })
 
-export const updateUserRequest = form => fetchWithRefresh(`${DOMAIN}/api/auth/user`, {
+export const updateUserRequest = (form: TForm) => fetchWithRefresh(`${DOMAIN}/api/auth/user`, {
     method: 'PATCH',
     headers: {
         authorization: localStorage.getItem('accessToken')
@@ -125,7 +146,7 @@ export const updateUserRequest = form => fetchWithRefresh(`${DOMAIN}/api/auth/us
     body: JSON.stringify(form)
 })
 
-export const logoutRequest = async () => {
+export const logoutRequest = async (): Promise<TBaseApiResponse> => {
     return request('api/auth/logout', {
         method: 'POST',
         headers: {

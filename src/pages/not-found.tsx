@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { FC } from 'react';
 import commonStyles from './common.module.css';
 import styles from './not-found.module.css';
 
-function NotFound404() {
+const NotFound404: FC = () => {
 
     return (
         <main className={commonStyles.container}>

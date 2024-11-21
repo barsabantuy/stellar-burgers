@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {FC, useEffect, useMemo} from 'react';
 import styles from './burger-constructor.module.css';
 import {Button, ConstructorElement, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
@@ -10,49 +10,58 @@ import ConstructorIngredient from "./constructor-ingredient";
 import {createOrder} from "../../services/order-details-slice";
 import {useLocation, useNavigate} from "react-router-dom";
 import {getUser} from "../../services/auth-slice";
+import {TIngredient, TIngredientItem} from "../../types";
 
-function BurgerConstructor() {
+const BurgerConstructor: FC = () => {
 
     const dispatch = useDispatch();
     const location = useLocation();
     const navigate = useNavigate();
 
+    // @ts-ignore
     const { user, loading: { getUser: userLoading } } = useSelector(store => store.auth);
 
     useEffect(() => {
+        // @ts-ignore
         dispatch(getUser());
     }, [dispatch]);
 
+    // @ts-ignore
     const { isModalOpen, bun, ingredients } = useSelector(store => store.burgerConstructor);
+    // @ts-ignore
     const { loading, error, order } = useSelector(store => store.orderDetails);
 
     const handleCreateOrder = () => {
         if (!userLoading && !user) {
             navigate("/login", { state: { from: location } });
         } else {
+            // @ts-ignore
             dispatch(createOrder([bun, ...ingredients, bun]));
             openOrderModal();
         }
     }
 
     const openOrderModal = () => {
+        // @ts-ignore
         dispatch(burgerConstructorActions.openModal());
     }
 
     const closeModal = () => {
+        // @ts-ignore
         dispatch(burgerConstructorActions.closeModal());
         if (!loading && !error && order) {
+            // @ts-ignore
             dispatch(burgerConstructorActions.clearConstructor());
         }
     }
 
     const [, drop] = useDrop({
         accept: 'ingredient',
-        drop: (item) => dispatch(burgerConstructorActions.addIngredient({ ...item })),
+        drop: (item: Element) => dispatch(burgerConstructorActions.addIngredient({ ...item })),
     });
 
     const totalPrice = useMemo(() => {
-        const ingredientsPrice = ingredients ? (ingredients.reduce((acc, curr) => acc + curr.price, 0)) : 0;
+        const ingredientsPrice = ingredients ? (ingredients.reduce((acc: number, curr: TIngredient) => acc + curr.price, 0)) : 0;
         const bunsPrice = bun ? bun.price * 2 : 0;
         return ingredientsPrice + bunsPrice;
     }, [ingredients, bun]);
@@ -82,7 +91,7 @@ function BurgerConstructor() {
                 </div>}
                 {ingredients &&
                     <ul className={styles.itemList}>
-                        {ingredients.map(((ingredient, index) => (
+                        {ingredients.map(((ingredient: TIngredientItem, index: number) => (
                             <li key={ingredient.uuid}>
                                 <ConstructorIngredient item={ingredient} index={index} />
                             </li>

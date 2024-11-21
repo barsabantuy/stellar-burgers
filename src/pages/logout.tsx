@@ -1,16 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import styles from './auth.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../services/auth-slice';
 
-function LogoutPage() {
+const LogoutPage: FC = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    // @ts-ignore
     const { user, loading } = useSelector(store => store.auth);
 
     useEffect(() => {
+        // @ts-ignore
         dispatch(logout());
     }, []);
 
