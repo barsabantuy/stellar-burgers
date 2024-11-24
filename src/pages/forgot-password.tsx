@@ -1,24 +1,22 @@
-import React, { FC, SyntheticEvent, useCallback } from 'react';
+import React, { FC, FormEvent, useCallback } from 'react';
 import styles from './auth.module.css';
 import commonStyles from './common.module.css';
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Navigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { forgotPassword } from '../services/password-reset-slice';
 import useForm from "../hooks/useForm";
+import {useAppDispatch, useAppSelector} from "../hooks";
 
 const ForgotPasswordPage: FC = () => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    // @ts-ignore
-    const { loading, tokenRequested } = useSelector(store => store.passwordReset);
+    const { loading, tokenRequested } = useAppSelector(store => store.passwordReset);
     const { form, handleChange } = useForm({ email: '' });
 
-    const handleForgotPassword = useCallback((e: SyntheticEvent) => {
+    const handleForgotPassword = useCallback((e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!isEmptyForm) {
-            // @ts-ignore
             dispatch(forgotPassword(form));
         }
     }, [dispatch, form]);
@@ -55,7 +53,7 @@ const ForgotPasswordPage: FC = () => {
                         placeholder='Укажите E-mail'
                         name={'email'}
                     />
-                    <Button onClick={handleForgotPassword} htmlType='submit' type='primary' size='medium'
+                    <Button htmlType='submit' type='primary' size='medium'
                             extraClass={styles.button} disabled={isEmptyForm}>
                         Восстановить
                     </Button>

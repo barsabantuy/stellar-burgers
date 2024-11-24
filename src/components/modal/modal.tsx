@@ -1,4 +1,4 @@
-import React, { FC, SyntheticEvent, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import styles from './modal.module.css';
 import ModalOverlay from "../modal-overlay/modal-overlay";
 import ReactDOM from "react-dom";
@@ -32,7 +32,7 @@ const Modal: FC<IModal> = ({ onClose, children }: IModal) => {
         onClose();
     };
 
-    const handleModalClick = (e: SyntheticEvent) => {
+    const handleModalClick = (e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
     };
 

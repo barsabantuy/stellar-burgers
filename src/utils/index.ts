@@ -3,3 +3,5 @@ export const checkResponse = (response: Response): Promise<any> => {
         ? response.json()
         : response.json().then((err) => Promise.reject(err));
 };
+
+export const UNKNOWN_ERROR: string = 'An unknown error occurred'

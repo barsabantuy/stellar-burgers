@@ -4,60 +4,54 @@ import {Button, ConstructorElement, CurrencyIcon} from "@ya.praktikum/react-deve
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { burgerConstructorActions } from "../../services/burger-constructor-slice"
-import {useDispatch, useSelector} from "react-redux";
 import {useDrop} from "react-dnd";
 import ConstructorIngredient from "./constructor-ingredient";
 import {createOrder} from "../../services/order-details-slice";
 import {useLocation, useNavigate} from "react-router-dom";
 import {getUser} from "../../services/auth-slice";
 import {TIngredient, TIngredientItem} from "../../types";
+import {useAppDispatch, useAppSelector} from "../../hooks";
 
 const BurgerConstructor: FC = () => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const location = useLocation();
     const navigate = useNavigate();
 
-    // @ts-ignore
-    const { user, loading: { getUser: userLoading } } = useSelector(store => store.auth);
+    const { user, loading: { getUser: userLoading } } = useAppSelector(store => store.auth);
 
     useEffect(() => {
-        // @ts-ignore
         dispatch(getUser());
     }, [dispatch]);
 
-    // @ts-ignore
-    const { isModalOpen, bun, ingredients } = useSelector(store => store.burgerConstructor);
-    // @ts-ignore
-    const { loading, error, order } = useSelector(store => store.orderDetails);
+    const { isModalOpen, bun, ingredients } = useAppSelector(store => store.burgerConstructor);
+    const { loading, error, order } = useAppSelector(store => store.orderDetails);
 
     const handleCreateOrder = () => {
         if (!userLoading && !user) {
             navigate("/login", { state: { from: location } });
         } else {
-            // @ts-ignore
-            dispatch(createOrder([bun, ...ingredients, bun]));
-            openOrderModal();
+            if (canOrder) {
+                dispatch(createOrder([bun._id, ...ingredients.map(ingredient => ingredient._id), bun._id]));
+                openOrderModal();
+            }
         }
     }
 
     const openOrderModal = () => {
-        // @ts-ignore
         dispatch(burgerConstructorActions.openModal());
     }
 
     const closeModal = () => {
-        // @ts-ignore
         dispatch(burgerConstructorActions.closeModal());
         if (!loading && !error && order) {
-            // @ts-ignore
             dispatch(burgerConstructorActions.clearConstructor());
         }
     }
 
     const [, drop] = useDrop({
         accept: 'ingredient',
-        drop: (item: Element) => dispatch(burgerConstructorActions.addIngredient({ ...item })),
+        drop: (item: TIngredientItem) => dispatch(burgerConstructorActions.addIngredient({ ...item })),
     });
 
     const totalPrice = useMemo(() => {

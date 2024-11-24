@@ -1,11 +1,11 @@
 import React, {FC, MutableRefObject, useCallback, useEffect, useMemo, useRef} from 'react';
 import styles from './burger-ingredients.module.css';
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useDispatch, useSelector } from "react-redux";
 import { burgerIngredientsActions } from "../../services/burger-ingredients-slice"
 import { useInView } from "react-intersection-observer";
 import Ingredient from "./ingredient";
 import {TIngredient} from "../../types";
+import {useAppDispatch, useAppSelector} from "../../hooks";
 
 const THRESHOLD: number = 0.1;
 
@@ -18,7 +18,7 @@ const BurgerIngredients: FC = () => {
     const [bunsInViewRef, bunsInView] = useInView({ threshold: THRESHOLD });
     const [saucesInViewRef, saucesInView] = useInView({ threshold: THRESHOLD });
     const [mainsInViewRef, mainsInView] = useInView({ threshold: THRESHOLD });
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const sections: ReadonlyArray<{
         name: string, id: string, ref: MutableRefObject<any>, refInView: (node: HTMLElement) => void
@@ -51,10 +51,8 @@ const BurgerIngredients: FC = () => {
         }, []
     );
 
-    // @ts-ignore
-    const {ingredients, activeSection } = useSelector(store => store.burgerIngredients);
-    // @ts-ignore
-    const { bun, ingredients: constructorIngredients } = useSelector(store => store.burgerConstructor);
+    const { ingredients, activeSection } = useAppSelector(store => store.burgerIngredients);
+    const { bun, ingredients: constructorIngredients } = useAppSelector(store => store.burgerConstructor);
 
     const usedIngredientsCounter = useMemo(() => {
         const counter: {

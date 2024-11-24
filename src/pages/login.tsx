@@ -1,25 +1,23 @@
-import React, {FC, SyntheticEvent, useCallback} from 'react';
+import React, { FC, FormEvent, useCallback } from 'react';
 import styles from './auth.module.css';
 import commonStyles from './common.module.css';
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Navigate, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../services/auth-slice';
 import useForm from "../hooks/useForm";
+import {useAppDispatch, useAppSelector} from "../hooks";
 
 const LoginPage: FC = () => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const location = useLocation();
 
-    // @ts-ignore
-    const { user, loading } = useSelector(store => store.auth);
+    const { user, loading } = useAppSelector(store => store.auth);
     const { form, handleChange } = useForm({ email: '', password: '' });
 
-    const handleLogin = useCallback((e: SyntheticEvent) => {
+    const handleLogin = useCallback((e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!isEmptyForm) {
-            // @ts-ignore
             dispatch(login(form));
         }
     }, [dispatch, form]);
@@ -63,7 +61,7 @@ const LoginPage: FC = () => {
                         name={'password'}
                         icon={'HideIcon'}
                     />
-                    <Button onClick={handleLogin} disabled={isEmptyForm} htmlType='submit' type='primary' size='medium'
+                    <Button disabled={isEmptyForm} htmlType='submit' type='primary' size='medium'
                             extraClass={styles.button}>
                         Вход
                     </Button>

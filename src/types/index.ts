@@ -30,3 +30,5 @@ export type TUser = {
     readonly email: string;
     readonly name: string;
 };
+
+export type TUserResponse = { user: TUser };

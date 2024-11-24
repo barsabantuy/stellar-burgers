@@ -1,10 +1,10 @@
 import React, {FC, useRef} from "react";
 import {useDrag, useDrop} from "react-dnd";
-import {useDispatch} from "react-redux";
 import { burgerConstructorActions } from "../../services/burger-constructor-slice";
 import styles from "./burger-constructor.module.css";
 import {ConstructorElement, DragIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import {TIngredientItem} from "../../types";
+import {useAppDispatch} from "../../hooks";
 
 interface IConstructorIngredient {
     item: TIngredientItem;
@@ -13,7 +13,7 @@ interface IConstructorIngredient {
 
 const ConstructorIngredient: FC<IConstructorIngredient> = ({ item, index }) => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const ref = useRef(null);
 
@@ -47,7 +47,7 @@ const ConstructorIngredient: FC<IConstructorIngredient> = ({ item, index }) => {
     drag(drop(ref));
 
     const handleClose = () => {
-        dispatch(burgerConstructorActions.removeIngredient({ uuid: item.uuid }));
+        dispatch(burgerConstructorActions.removeIngredient(item.uuid));
     }
 
     return (

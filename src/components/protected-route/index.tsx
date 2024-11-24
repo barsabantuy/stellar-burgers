@@ -1,8 +1,8 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import React, {FC, useEffect} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../../services/auth-slice';
 import styles from '../../pages/common.module.css';
+import {useAppDispatch, useAppSelector} from "../../hooks";
 
 interface IProtectedRoute {
     element: React.ReactElement;
@@ -11,14 +11,12 @@ interface IProtectedRoute {
 
 const ProtectedRoute: FC<IProtectedRoute> = ({ element, anonymous = false }) => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const location = useLocation();
 
-    // @ts-ignore
-    const { user, loading } = useSelector(store => store.auth);
+    const { user, loading } = useAppSelector(store => store.auth);
 
     useEffect(() => {
-        // @ts-ignore
         dispatch(getUser());
     }, [dispatch]);
 

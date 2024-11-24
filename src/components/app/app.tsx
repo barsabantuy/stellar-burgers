@@ -18,18 +18,17 @@ import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import AppHeader from "../app-header/app-header";
 import { fetchBurgerIngredients } from "../../services/burger-ingredients-slice";
-import { useDispatch } from "react-redux";
 import ProtectedRoute from "../protected-route";
 import type { Location } from "@remix-run/router";
+import {useAppDispatch} from "../../hooks";
 
 const App: FC = () => {
 
     const location = useLocation();
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
-        // @ts-ignore
         dispatch(fetchBurgerIngredients());
     }, [dispatch]);
 

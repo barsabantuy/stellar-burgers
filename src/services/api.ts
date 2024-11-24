@@ -1,5 +1,5 @@
 import { checkResponse } from '../utils';
-import {TForm, TIngredient, TOrder, TUser} from "../types";
+import {TForm, TIngredient, TOrder, TUser, TUserResponse} from "../types";
 
 const DOMAIN = 'https://norma.nomoreparties.space';
 
@@ -21,7 +21,7 @@ const request = async (path: string, options?: RequestInit): Promise<any> => {
         .then(checkResponse);
 };
 
-export const fetchIngredients = async (): Promise<TApiResponse & { data: TIngredient }> => {
+export const fetchIngredients = async (): Promise<{ data: TIngredient[] }> => {
     return request('api/ingredients');
 }
 
@@ -35,7 +35,7 @@ export const postOrder = async (ingredients: ReadonlyArray<string>): Promise<TAp
     })
 }
 
-export const registerRequest = async (form: TForm): Promise<TTokenApiResponse<TUser>> => {
+export const registerRequest = async (form: TForm): Promise<TUserResponse> => {
     return request('api/auth/register', {
         method: 'POST',
         headers: {
@@ -46,8 +46,7 @@ export const registerRequest = async (form: TForm): Promise<TTokenApiResponse<TU
         .then(saveTokens)
 }
 
-
-export const loginRequest = async (form: TForm): Promise<TTokenApiResponse<TUser>> => {
+export const loginRequest = async (form: TForm): Promise<TUserResponse> => {
     return request('api/auth/login', {
         method: 'POST',
         headers: {
@@ -131,14 +130,14 @@ const deleteTokens = (response: TBaseApiResponse) => {
     return response;
 }
 
-export const getUserRequest = () => fetchWithRefresh(`${DOMAIN}/api/auth/user`, {
+export const getUserRequest = (): Promise<TUserResponse> => fetchWithRefresh(`${DOMAIN}/api/auth/user`, {
     method: 'GET',
     headers: {
         authorization: localStorage.getItem('accessToken')
     },
 })
 
-export const updateUserRequest = (form: TForm) => fetchWithRefresh(`${DOMAIN}/api/auth/user`, {
+export const updateUserRequest = (form: TForm): Promise<TUserResponse> => fetchWithRefresh(`${DOMAIN}/api/auth/user`, {
     method: 'PATCH',
     headers: {
         authorization: localStorage.getItem('accessToken')

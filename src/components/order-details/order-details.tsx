@@ -1,12 +1,11 @@
 import React, { FC } from 'react';
 import styles from './order-details.module.css';
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useSelector } from "react-redux";
+import {useAppSelector} from "../../hooks";
 
 const OrderDetails: FC = () => {
 
-    // @ts-ignore
-    const { order, loading, error } = useSelector(store => store.orderDetails);
+    const { order, loading, error } = useAppSelector(store => store.orderDetails);
 
     if (loading) {
         return (

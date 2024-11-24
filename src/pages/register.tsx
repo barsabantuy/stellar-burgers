@@ -1,17 +1,16 @@
-import React, {FC, SyntheticEvent, useCallback} from 'react';
+import React, { FC, FormEvent, useCallback } from 'react';
 import styles from './auth.module.css';
 import commonStyle from './common.module.css';
 import { Button, EmailInput, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-router-dom';
-import {useDispatch, useSelector} from 'react-redux';
 import { register } from '../services/auth-slice';
 import useForm from "../hooks/useForm";
+import {useAppDispatch, useAppSelector} from "../hooks";
 
 const RegistrationPage: FC = () => {
 
-    const dispatch = useDispatch();
-    // @ts-ignore
-    const { loading } = useSelector(store => store.auth);
+    const dispatch = useAppDispatch();
+    const { loading } = useAppSelector(store => store.auth);
 
     const { form, handleChange } = useForm({ name: '', email: '', password: '' });
 
@@ -21,10 +20,9 @@ const RegistrationPage: FC = () => {
         inputRef?.current?.focus();
     }
 
-    const handleRegister = useCallback((e: SyntheticEvent) => {
+    const handleRegister = useCallback((e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!isEmptyForm) {
-            // @ts-ignore
             dispatch(register(form));
         }
     }, [dispatch, form]);
@@ -75,7 +73,7 @@ const RegistrationPage: FC = () => {
                         name={'password'}
                         icon={'HideIcon'}
                     />
-                    <Button onClick={handleRegister} htmlType='submit' type='primary' size='medium'
+                    <Button htmlType='submit' type='primary' size='medium'
                             extraClass={styles.button} disabled={isEmptyForm}>
                         Зарегистрироваться
                     </Button>

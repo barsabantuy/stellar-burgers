@@ -1,15 +1,14 @@
 import React, { FC } from 'react';
 import styles from './ingredient-details.module.css';
-import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { TIngredient } from "../../types";
+import {useAppSelector} from "../../hooks";
 
 const IngredientDetails: FC = () => {
 
     const { ingredientId } = useParams();
 
-    // @ts-ignore
-    const { ingredients, loading, error } = useSelector(store => store.burgerIngredients);
+    const { ingredients, loading, error } = useAppSelector(store => store.burgerIngredients);
 
     if (loading) {
         return (

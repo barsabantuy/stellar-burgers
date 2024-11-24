@@ -1,17 +1,16 @@
-import React, { FC, SyntheticEvent, useCallback, useEffect } from 'react';
+import React, {FC, FormEvent, SyntheticEvent, useCallback, useEffect} from 'react';
 import styles from './profile.module.css';
 import { Button, EmailInput, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import ProfileMenu from '../components/profile-menu/profile-menu';
-import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from '../services/auth-slice';
 import useForm from "../hooks/useForm";
+import {useAppDispatch, useAppSelector} from "../hooks";
 
 const ProfilePage: FC = () => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    // @ts-ignore
-    const { user } = useSelector(store => store.auth);
+    const { user } = useAppSelector(store => store.auth);
 
     const { form, handleChange, setValue } = useForm({ name: '', email: '', password: '' });
 
@@ -31,10 +30,9 @@ const ProfilePage: FC = () => {
         inputRef?.current?.focus();
     }
 
-    const handleUpdateUser = useCallback((e: SyntheticEvent) => {
+    const handleUpdateUser = useCallback((e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (canSubmit) {
-            // @ts-ignore
             dispatch(updateUser(form));
         }
     }, [dispatch, form]);
@@ -51,7 +49,7 @@ const ProfilePage: FC = () => {
     }, [user]);
 
     const isEmptyForm = form.name === '' || form.email === '';
-    const dataChanged = form.name !== user.name || form.email !== user.email;
+    const dataChanged = form.name !== user?.name || form.email !== user?.email;
     const passwordNotEmpty = form.password !== '';
     const canSubmit = !isEmptyForm && dataChanged && passwordNotEmpty;
 
@@ -96,7 +94,7 @@ const ProfilePage: FC = () => {
                     />
                     {canSubmit &&
                         <div>
-                            <Button onClick={handleUpdateUser} htmlType='submit' type='primary' size='medium'
+                            <Button htmlType='submit' type='primary' size='medium'
                                     extraClass={styles.button}>
                                 Сохранить
                             </Button>

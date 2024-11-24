@@ -1,24 +1,22 @@
-import React, {FC, SyntheticEvent, useCallback} from 'react';
+import React, {FC, FormEvent, useCallback} from 'react';
 import styles from './auth.module.css';
 import commonStyles from './common.module.css';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Navigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { resetPassword } from '../services/password-reset-slice';
 import useForm from "../hooks/useForm";
+import {useAppDispatch, useAppSelector} from "../hooks";
 
 const ResetPasswordPage: FC = () => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    // @ts-ignore
-    const { loading, tokenRequested } = useSelector(store => store.passwordReset);
+    const { loading, tokenRequested } = useAppSelector(store => store.passwordReset);
     const { form, handleChange } = useForm({ password: '', token: '' });
 
-    const handleResetPassword = useCallback((e: SyntheticEvent) => {
+    const handleResetPassword = useCallback((e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!isEmptyForm) {
-            // @ts-ignore
             dispatch(resetPassword(form));
         }
     }, [dispatch, form]);
@@ -74,7 +72,7 @@ const ResetPasswordPage: FC = () => {
                         onPointerEnterCapture={undefined}
                         onPointerLeaveCapture={undefined}
                     />
-                    <Button onClick={handleResetPassword} htmlType='submit' type='primary' size='medium'
+                    <Button htmlType='submit' type='primary' size='medium'
                             extraClass={styles.button} disabled={isEmptyForm}>
                         Сохранить
                     </Button>
