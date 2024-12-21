@@ -1,10 +1,11 @@
-import {Counter, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
+import {Counter} from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "../burger-ingredients/burger-ingredients.module.css";
 import commonStyles from "../../pages/common.module.css";
 import React, {FC} from "react";
 import {useDrag} from "react-dnd";
 import {Link, useLocation} from "react-router-dom";
 import {TIngredient} from "../../types";
+import Price from "../price/price";
 
 interface IIngredient {
     item: TIngredient;
@@ -33,12 +34,7 @@ const Ingredient: FC<IIngredient> = ({ item, counter }) => {
             <div ref={drag} className={styles.item}>
                 {counter && <Counter count={counter} size="default" extraClass="m-1"/>}
                 <img src={item.image} alt={item.name}/>
-                <div className={styles.price}>
-                    <p className="text text_type_digits-default">
-                        {item.price}
-                    </p>
-                    <CurrencyIcon type="primary"/>
-                </div>
+                <Price price={item.price} />
                 <h3 className="text text_type_main-small">
                     {item.name}
                 </h3>

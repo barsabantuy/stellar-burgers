@@ -1,0 +1,42 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    width: 640px;
+}
+
+.orderNumber {
+    margin: 0 auto;
+    padding: 0;
+}
+
+.header {
+    margin: 40px 0 60px;
+    padding: 0;
+}
+
+.footer {
+    padding-top: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.listItem {
+    display: flex;
+    align-items: center;
+}
+
+.ingredientName {
+    margin: 0 auto 0 12px;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 312px;
+    list-style: none;
+    overflow-y: scroll;
+    padding: 0 34px 0 0;
+}

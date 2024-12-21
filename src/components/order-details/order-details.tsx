@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import commonStyles from '../../pages/common.module.css';
 import styles from './order-details.module.css';
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import {useAppSelector} from "../../hooks";
@@ -25,7 +26,7 @@ const OrderDetails: FC = () => {
 
     return (
         <section className={styles.details}>
-            <h1 className={`${styles.counter} text text_type_digits-large mb-8`}>{order}</h1>
+            <h1 className={`${commonStyles.counterShadow} text text_type_digits-large mb-8`}>{order}</h1>
             <p className="text text_type_main-medium">Идентификатор заказа</p>
             <div className={styles.doneIcon}>
                 <CheckMarkIcon type="primary" />

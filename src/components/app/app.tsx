@@ -10,7 +10,9 @@ import {
     ResetPasswordPage,
     IngredientDetailsPage,
     ProfilePage,
-    OrdersPage,
+    OrdersHistoryPage,
+    FeedPage,
+    OrderInfoPage,
     NotFound404
 } from "../../pages";
 
@@ -21,6 +23,7 @@ import { fetchBurgerIngredients } from "../../services/burger-ingredients-slice"
 import ProtectedRoute from "../protected-route";
 import type { Location } from "@remix-run/router";
 import {useAppDispatch} from "../../hooks";
+import OrderInfo from "../order/order-info";
 
 const App: FC = () => {
 
@@ -43,8 +46,11 @@ const App: FC = () => {
             <AppHeader />
             <Routes location={background || location}>
                 <Route path='/' element={<HomePage />} />
+                <Route path='/feed' element={<FeedPage />} />
+                <Route path="/feed/:orderId" element={<OrderInfoPage />} />
                 <Route path='/profile' element={<ProtectedRoute element={<ProfilePage />} />} />
-                <Route path='/profile/orders' element={<ProtectedRoute element={<OrdersPage />} />} />
+                <Route path='/profile/orders' element={<ProtectedRoute element={<OrdersHistoryPage />} />} />
+                <Route path='/profile/orders/:orderId' element={<ProtectedRoute element={<OrderInfoPage />} />} />
                 <Route path='/logout' element={<ProtectedRoute element={<LogoutPage />} />} />
                 <Route path='/login' element={<ProtectedRoute anonymous={true} element={<LoginPage />} />} />
                 <Route path='/register' element={<ProtectedRoute anonymous={true} element={<RegistrationPage />} />} />
@@ -61,6 +67,22 @@ const App: FC = () => {
                         element={
                             <Modal onClose={handleModalClose}>
                                 <IngredientDetails />
+                            </Modal>
+                        }
+                    />
+                    <Route
+                        path='/profile/orders/:orderId'
+                        element={
+                            <Modal onClose={handleModalClose}>
+                                <OrderInfo />
+                            </Modal>
+                        }
+                    />
+                    <Route
+                        path='/feed/:orderId'
+                        element={
+                            <Modal onClose={handleModalClose}>
+                                <OrderInfo />
                             </Modal>
                         }
                     />

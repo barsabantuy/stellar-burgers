@@ -1,0 +1,21 @@
+.container {
+    padding-top: 40px;
+    width: 600px;
+    box-sizing: border-box;
+}
+
+.orderList {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    height: calc(100vh - 200px);
+    overflow-y: scroll;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}

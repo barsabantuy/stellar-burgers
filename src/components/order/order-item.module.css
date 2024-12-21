@@ -1,0 +1,57 @@
+.orderContainer {
+    display: flex;
+    flex-direction: column;
+    max-width: calc(100% - 16px);
+    box-sizing: border-box;
+    padding: 24px;
+    margin-bottom: 16px;
+    gap: 24px;
+    background-color: rgba(28, 28, 33, 1);
+    border-radius: 25px;
+}
+
+.orderHeader {
+    display: flex;
+    justify-content: space-between;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ingredientList {
+    padding: 0;
+    display: flex;
+    list-style: none;
+}
+
+.list .ingredient:nth-last-child(n) {
+    z-index: calc(100 - n);
+}
+
+.overlap {
+    margin-right: -24px;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: rgba(28, 28, 33, 0.6);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    pointer-events: none;
+}
+
+.state {
+    margin-top: -16px;
+}

@@ -21,9 +21,11 @@ export type TIngredientItem = TIngredient & {
     uuid: string;
 };
 
-export type TOrder = {
+export type TOrderCreated = {
     readonly name: string;
-    readonly order: { readonly number: number }
+    readonly order: {
+        readonly number: number;
+    }
 };
 
 export type TUser = {
@@ -32,3 +34,20 @@ export type TUser = {
 };
 
 export type TUserResponse = { user: TUser };
+
+export type TFeedResponse = {
+    success: boolean;
+    orders: TOrder[];
+    total: number;
+    totalToday: number;
+};
+
+export type TOrder = {
+    readonly ingredients: string[];
+    readonly _id: string;
+    readonly name: string;
+    readonly status: string;
+    readonly number: number;
+    readonly createdAt: string;
+    readonly updatedAt: string;
+}
