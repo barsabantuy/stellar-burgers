@@ -20,3 +20,38 @@
     flex-direction: column;
     align-items: center;
 }
+
+.counterShadow {
+    text-shadow: 0 4px 32px rgba(51, 51, 255, 0.5);
+}
+
+.done {
+    color: #00CCCC;
+}
+
+.ingredient {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px #801AB3 solid;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: #131316;
+}
+
+.ingredient img {
+    width: 75%;
+    height: 75%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
