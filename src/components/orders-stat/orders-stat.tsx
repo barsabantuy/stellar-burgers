@@ -12,7 +12,7 @@ const MAX_ORDERS_COUNT = 10;
 
 const OrdersStat: FC = () => {
 
-    const {orders, total, totalToday} = useAppSelector(store => store.webSocket);
+    const {orders, total, totalToday} = useAppSelector(store => store.feed);
 
     const columnsByStatus = useMemo<TOrdersByStatus>(() => {
         const result: TOrdersByStatus = {};

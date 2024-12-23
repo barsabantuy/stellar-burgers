@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
-import styles from './common.module.css';
+import styles from '../common.module.css';
 
-import IngredientDetails from '../components/ingredient-details/ingredient-details';
+import IngredientDetails from '../../components/ingredient-details/ingredient-details';
 
 const ingredientDetailsPage: FC = () => {
     return (

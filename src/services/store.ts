@@ -4,9 +4,11 @@ import burgerConstructorSlice from "./burger-constructor-slice";
 import orderDetailsSlice from "./order-details-slice";
 import authSlice from "./auth-slice";
 import passwordResetSlice from "./password-reset-slice";
-import webSocketReducer from "./web-socket-slice";
+import feedReducer from "./feed-slice";
+import userOrdersReducer from "./user-orders-slice";
 import orderInfoReducer from "./order-info-slice";
-import {websocketMiddleware} from "../middleware/websocket-middleware";
+import {feedWebsocketMiddleware} from "../middleware/feed-websocket-middleware";
+import {userOrdersWebsocketMiddleware} from "../middleware/user-orders-websocket-middleware";
 
 const store = configureStore({
     reducer: {
@@ -15,11 +17,12 @@ const store = configureStore({
         orderDetails: orderDetailsSlice,
         auth: authSlice,
         passwordReset: passwordResetSlice,
-        webSocket: webSocketReducer,
+        feed: feedReducer,
+        userOrders: userOrdersReducer,
         orderInfo: orderInfoReducer,
     },
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(websocketMiddleware),
+        getDefaultMiddleware().concat(feedWebsocketMiddleware).concat(userOrdersWebsocketMiddleware),
 });
 
 export default store;

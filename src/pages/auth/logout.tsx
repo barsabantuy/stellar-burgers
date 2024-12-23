@@ -1,8 +1,8 @@
 import React, { FC, useEffect } from 'react';
 import styles from './auth.module.css';
 import { useNavigate } from 'react-router-dom';
-import { logout } from '../services/auth-slice';
-import {useAppDispatch, useAppSelector} from "../hooks";
+import { logout } from '../../services/auth-slice';
+import {useAppDispatch, useAppSelector} from "../../hooks";
 
 const LogoutPage: FC = () => {
 
@@ -11,10 +11,12 @@ const LogoutPage: FC = () => {
     const { user, loading } = useAppSelector(store => store.auth);
 
     useEffect(() => {
+        console.log('logout');
         dispatch(logout());
     }, []);
 
     useEffect(() => {
+        console.log('loading logout', loading);
         if (!loading.logout && !user) {
             navigate('/login', { replace: true });
         }

@@ -34,6 +34,9 @@ const ProtectedRoute: FC<IProtectedRoute> = ({ element, anonymous = false }) => 
     const from = location.state?.from || '/';
 
     if (anonymous && isLoggedIn) {
+        if (from?.pathname === '/logout') {
+            return <Navigate to="/" />;
+        }
         return <Navigate to={ from } />;
     }
 

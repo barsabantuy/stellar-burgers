@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import commonStyles from './common.module.css';
+import commonStyles from '../common.module.css';
 import styles from './not-found.module.css';
 
 const NotFound404: FC = () => {

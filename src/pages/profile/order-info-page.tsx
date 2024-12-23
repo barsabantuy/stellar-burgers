@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import styles from './order-info-page.module.css'
-import OrderInfo from "../components/order/order-info";
+import OrderInfo from "../../components/order/order-info";
 
 const OrderInfoPage: FC = () => {
 

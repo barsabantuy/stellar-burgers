@@ -1,17 +1,17 @@
 import { Middleware } from '@reduxjs/toolkit';
 import {
-    connect,
-    connected,
-    disconnect,
-    disconnected,
-    connectionError,
-    messageReceived,
-} from '../services/web-socket-slice';
+    connectUserOrders,
+    connectedUserOrders,
+    disconnectUserOrders,
+    disconnectedUserOrders,
+    connectionUserOrdersError,
+    messageUserOrdersReceived,
+} from '../services/user-orders-slice';
 
 let socket: WebSocket | null = null;
 
-export const websocketMiddleware: Middleware = store => next => action => {
-    if (connect.match(action)) {
+export const userOrdersWebsocketMiddleware: Middleware = store => next => action => {
+    if (connectUserOrders.match(action)) {
         if (socket) {
             socket.close();
         }
@@ -26,23 +26,23 @@ export const websocketMiddleware: Middleware = store => next => action => {
         }
 
         socket.onopen = () => {
-            store.dispatch(connected());
+            store.dispatch(connectedUserOrders());
         };
 
         socket.onmessage = (event) => {
-            store.dispatch(messageReceived(JSON.parse(event.data)));
+            store.dispatch(messageUserOrdersReceived(JSON.parse(event.data)));
         };
 
         socket.onerror = (err) => {
-            store.dispatch(connectionError('WebSocket error occurred'));
+            store.dispatch(connectionUserOrdersError('WebSocket error occurred'));
         };
 
         socket.onclose = () => {
-            store.dispatch(disconnected());
+            store.dispatch(disconnectedUserOrders());
         };
     }
 
-    if (disconnect.match(action)) {
+    if (disconnectUserOrders.match(action)) {
         if (socket) {
             socket.close();
             socket = null;

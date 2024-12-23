@@ -1,15 +1,15 @@
-import HomePage from './home';
-import LoginPage from './login';
-import RegistrationPage from './register';
-import ForgotPasswordPage from './forgot-password';
-import ResetPasswordPage from './reset-password';
-import IngredientDetailsPage from './ingredient-details-page';
-import NotFound404 from './not-found';
-import ProfilePage from './profile';
-import OrdersHistoryPage from './orders-history';
-import LogoutPage from './logout';
-import FeedPage from './feed';
-import OrderInfoPage from './order-info-page';
+import HomePage from './burger-constructor/home';
+import LoginPage from './auth/login';
+import RegistrationPage from './auth/register';
+import ForgotPasswordPage from './auth/forgot-password';
+import ResetPasswordPage from './auth/reset-password';
+import IngredientDetailsPage from './burger-constructor/ingredient-details-page';
+import NotFound404 from './not-found/not-found';
+import ProfilePage from './profile/profile';
+import OrdersHistoryPage from './profile/orders-history';
+import LogoutPage from './auth/logout';
+import FeedPage from './feed/feed';
+import OrderInfoPage from './profile/order-info-page';
 
 export {
     HomePage,

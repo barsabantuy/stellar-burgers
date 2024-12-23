@@ -1,12 +1,12 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, useMemo} from 'react';
 import styles from './orders-history.module.css';
-import ProfileMenu from '../components/profile/profile-menu';
-import commonStyles from "./common.module.css";
+import ProfileMenu from '../../components/profile/profile-menu';
+import commonStyles from "../common.module.css";
 import {Link, useLocation} from "react-router-dom";
-import {useAppDispatch, useAppSelector} from "../hooks";
-import {connect, disconnect} from "../services/web-socket-slice";
-import {USER_ORDERS_WEBSOCKET_URL} from "../services/api";
-import OrderItem from "../components/order/order-item";
+import {useAppDispatch, useAppSelector} from "../../hooks";
+import {connectUserOrders, disconnectUserOrders} from "../../services/user-orders-slice";
+import {USER_ORDERS_WEBSOCKET_URL} from "../../services/api";
+import OrderItem from "../../components/order/order-item";
 
 const OrdersHistoryPage: FC = () => {
 
@@ -14,15 +14,22 @@ const OrdersHistoryPage: FC = () => {
 
     const dispatch = useAppDispatch();
 
-    const { orders, isConnected } = useAppSelector(store => store.webSocket)
+    const { orders, isConnected } = useAppSelector(store => store.userOrders)
 
     useEffect(() => {
-        dispatch(connect(USER_ORDERS_WEBSOCKET_URL));
+        dispatch(connectUserOrders(USER_ORDERS_WEBSOCKET_URL));
 
         return () => {
-            dispatch(disconnect());
+            dispatch(disconnectUserOrders());
         };
     }, [dispatch]);
+
+    const sortedOrders = useMemo(() => {
+        if (!orders) {
+            return [];
+        }
+        return [...orders].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    }, [orders]);
 
     if (!isConnected || !orders) {
         return (
@@ -49,7 +56,7 @@ const OrdersHistoryPage: FC = () => {
                 </aside>
                 <section className={styles.orders}>
                     <ul className={styles.orderList}>
-                        {orders.map(order => {
+                        {sortedOrders.map(order => {
                             return (
                                 <Link
                                     to={`${order.number}`}

@@ -13,6 +13,11 @@
     overflow-y: scroll;
 }
 
+.orderItem {
+    padding: 0;
+    margin: 0;
+}
+
 .loading {
     display: flex;
     justify-content: center;
