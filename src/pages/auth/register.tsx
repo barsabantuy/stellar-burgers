@@ -1,11 +1,11 @@
 import React, { FC, FormEvent, useCallback } from 'react';
 import styles from './auth.module.css';
-import commonStyle from './common.module.css';
+import commonStyle from '../common.module.css';
 import { Button, EmailInput, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-router-dom';
-import { register } from '../services/auth-slice';
-import useForm from "../hooks/useForm";
-import {useAppDispatch, useAppSelector} from "../hooks";
+import { register } from '../../services/auth-slice';
+import useForm from "../../hooks/useForm";
+import {useAppDispatch, useAppSelector} from "../../hooks";
 
 const RegistrationPage: FC = () => {
 

@@ -1,5 +1,8 @@
 import { checkResponse } from '../utils';
-import {TForm, TIngredient, TOrder, TUser, TUserResponse} from "../types";
+import {TForm, TIngredient, TOrderCreated, TOrder, TUserResponse} from "../types";
+
+export const FEED_WEBSOCKET_URL = 'wss://norma.nomoreparties.space/orders/all';
+export const USER_ORDERS_WEBSOCKET_URL = 'wss://norma.nomoreparties.space/orders'; // with token
 
 const DOMAIN = 'https://norma.nomoreparties.space';
 
@@ -25,14 +28,18 @@ export const fetchIngredients = async (): Promise<{ data: TIngredient[] }> => {
     return request('api/ingredients');
 }
 
-export const postOrder = async (ingredients: ReadonlyArray<string>): Promise<TApiResponse & TOrder> => {
-    return request('api/orders', {
+export const fetchOrderRequest = async (orderId: string): Promise<{ success: boolean, orders: TOrder[] }> => {
+    return request(`api/orders/${orderId}`);
+}
+
+export const postOrder = async (ingredients: ReadonlyArray<string>): Promise<TApiResponse & TOrderCreated> => {
+    return fetchWithRefresh(`${DOMAIN}/api/orders`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({ ingredients: [...ingredients] })
-    })
+    });
 }
 
 export const registerRequest = async (form: TForm): Promise<TUserResponse> => {
@@ -101,25 +108,30 @@ export const refreshToken = async (): Promise<TTokenApiResponse<any>> => {
 
 export const fetchWithRefresh = async (url: string, options: any): Promise<any> => {
     try {
-        const res = await fetch(url, options);
+        const optionsWithToken = getOptionsWithAuthToken(options, localStorage.getItem('accessToken'));
+        const res = await fetch(url, optionsWithToken);
         return await checkResponse(res);
     } catch (err: any) {
         if (err.message === 'jwt expired') {
             const refreshData = await refreshToken();
-            const newOptions = {
-                ...options,
-                headers: {
-                    ...options.headers,
-                    authorization: refreshData.accessToken
-                },
-            };
-            const res = await fetch(url, newOptions);
+            const optionsWithToken = getOptionsWithAuthToken(options, refreshData.accessToken);
+            const res = await fetch(url, optionsWithToken);
             return await checkResponse(res);
         } else {
             return Promise.reject(err);
         }
     }
 };
+
+const getOptionsWithAuthToken = (options: any, token: string | null) => {
+    return {
+        ...options,
+        headers: {
+            ...options.headers,
+            authorization: token
+        },
+    };
+}
 
 const deleteTokens = (response: TBaseApiResponse) => {
     if (!response.success) {
@@ -132,16 +144,10 @@ const deleteTokens = (response: TBaseApiResponse) => {
 
 export const getUserRequest = (): Promise<TUserResponse> => fetchWithRefresh(`${DOMAIN}/api/auth/user`, {
     method: 'GET',
-    headers: {
-        authorization: localStorage.getItem('accessToken')
-    },
 })
 
 export const updateUserRequest = (form: TForm): Promise<TUserResponse> => fetchWithRefresh(`${DOMAIN}/api/auth/user`, {
     method: 'PATCH',
-    headers: {
-        authorization: localStorage.getItem('accessToken')
-    },
     body: JSON.stringify(form)
 })
 

@@ -5,20 +5,20 @@
 }
 
 .content {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-
+    display: flex;
     width: 1200px;
-    padding: 120px 20px 0;
+    padding: 20px 20px 0;
     box-sizing: border-box;
+    gap: 40px;
 }
 
 .sidebar {
+    padding-top: 120px;
     width: 320px;
 }
 
 .form {
-    margin: 0 auto;
+    padding-top: 120px;
     width: 480px;
     display: flex;
     flex-direction: column;

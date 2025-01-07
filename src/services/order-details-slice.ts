@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {postOrder} from "./api";
-import {TOrder} from "../types";
+import {TOrderCreated} from "../types";
 import {UNKNOWN_ERROR} from "../utils";
 
 export const createOrder = createAsyncThunk(
@@ -36,7 +36,7 @@ const orderDetailsSlice = createSlice({
                 state.order = 0;
                 state.error = null;
             })
-            .addCase(createOrder.fulfilled, (state, action: PayloadAction<TOrder>) => {
+            .addCase(createOrder.fulfilled, (state, action: PayloadAction<TOrderCreated>) => {
                 state.loading = false;
                 state.name = action.payload.name;
                 state.order = action.payload.order.number;

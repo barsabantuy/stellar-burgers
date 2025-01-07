@@ -1,10 +1,10 @@
 import React, {FC, FormEvent, SyntheticEvent, useCallback, useEffect} from 'react';
 import styles from './profile.module.css';
 import { Button, EmailInput, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import ProfileMenu from '../components/profile-menu/profile-menu';
-import { updateUser } from '../services/auth-slice';
-import useForm from "../hooks/useForm";
-import {useAppDispatch, useAppSelector} from "../hooks";
+import ProfileMenu from '../../components/profile/profile-menu';
+import { updateUser } from '../../services/auth-slice';
+import useForm from "../../hooks/useForm";
+import {useAppDispatch, useAppSelector} from "../../hooks";
 
 const ProfilePage: FC = () => {
 

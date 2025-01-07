@@ -1,11 +1,11 @@
 import React, { FC, FormEvent, useCallback } from 'react';
 import styles from './auth.module.css';
-import commonStyles from './common.module.css';
+import commonStyles from '../common.module.css';
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Navigate } from 'react-router-dom';
-import { forgotPassword } from '../services/password-reset-slice';
-import useForm from "../hooks/useForm";
-import {useAppDispatch, useAppSelector} from "../hooks";
+import { forgotPassword } from '../../services/password-reset-slice';
+import useForm from "../../hooks/useForm";
+import {useAppDispatch, useAppSelector} from "../../hooks";
 
 const ForgotPasswordPage: FC = () => {
 
