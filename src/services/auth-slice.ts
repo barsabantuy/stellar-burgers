@@ -6,7 +6,7 @@ import {
     getUserRequest,
     updateUserRequest
 } from "./api";
-import {TForm, TUser, TUserResponse} from "../types";
+import {TError, TForm, TUser, TUserResponse} from "../types";
 import {UNKNOWN_ERROR} from "../utils";
 
 export const register = createAsyncThunk(
@@ -50,13 +50,13 @@ interface IAuthState {
         resetPassword: boolean;
     },
     error: {
-        register: {} | string | null;
-        login: {} | string | null;
-        getUser: {} | string | null;
-        updateUser: {} | string | null;
-        logout: {} | string | null;
-        forgotPassword: {} | string | null;
-        resetPassword: {} | string | null;
+        register: TError;
+        login: TError;
+        getUser: TError;
+        updateUser: TError;
+        logout: TError;
+        forgotPassword: TError;
+        resetPassword: TError;
     }
 }
 

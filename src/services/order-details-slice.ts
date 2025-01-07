@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {postOrder} from "./api";
-import {TOrderCreated} from "../types";
+import { TError, TOrderCreated } from "../types";
 import {UNKNOWN_ERROR} from "../utils";
 
 export const createOrder = createAsyncThunk(
@@ -14,7 +14,7 @@ interface IOrderDetailsState {
     name: string;
     order: number;
     loading: boolean;
-    error: {} | string | null;
+    error: TError;
 }
 
 const initialState: IOrderDetailsState = {
