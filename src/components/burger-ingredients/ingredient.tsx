@@ -27,11 +27,12 @@ const Ingredient: FC<IIngredient> = ({ item, counter }) => {
 
     return (
         <Link
+            ref={drag}
             to={`/ingredients/${ingredientId}`}
             state={{ background: location }}
             className={commonStyles.link}
         >
-            <div ref={drag} className={styles.item}>
+            <div className={styles.item}>
                 {counter && <Counter count={counter} size="default" extraClass="m-1"/>}
                 <img src={item.image} alt={item.name}/>
                 <Price price={item.price} />

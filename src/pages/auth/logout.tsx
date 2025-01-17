@@ -11,12 +11,10 @@ const LogoutPage: FC = () => {
     const { user, loading } = useAppSelector(store => store.auth);
 
     useEffect(() => {
-        console.log('logout');
         dispatch(logout());
     }, []);
 
     useEffect(() => {
-        console.log('loading logout', loading);
         if (!loading.logout && !user) {
             navigate('/login', { replace: true });
         }
