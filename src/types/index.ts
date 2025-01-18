@@ -12,9 +12,9 @@ export type TIngredient = {
     readonly calories?: number;
     readonly price: number;
     readonly image: string;
-    readonly image_mobile: string;
-    readonly image_large: string;
-    readonly __v: number;
+    readonly image_mobile?: string;
+    readonly image_large?: string;
+    readonly __v?: number;
 };
 
 export type TIngredientItem = TIngredient & {
@@ -34,6 +34,8 @@ export type TUser = {
 };
 
 export type TUserResponse = { user: TUser };
+
+export type TError = {} | string | null;
 
 export type TFeedResponse = {
     success: boolean;

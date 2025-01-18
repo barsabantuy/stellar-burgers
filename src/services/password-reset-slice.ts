@@ -29,7 +29,7 @@ interface IPasswordResetSlice {
     };
 }
 
-const initialState: IPasswordResetSlice = {
+export const initialState: IPasswordResetSlice = {
     tokenRequested: false,
     loading: {
         forgotPassword: false,

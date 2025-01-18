@@ -1,7 +1,7 @@
 import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
 import { fetchIngredients } from './api';
 import {UNKNOWN_ERROR} from "../utils";
-import {TIngredient} from "../types";
+import {TError, TIngredient} from "../types";
 
 export const fetchBurgerIngredients = createAsyncThunk(
     'burgerIngredients/fetchBurgerIngredients', fetchIngredients
@@ -12,10 +12,10 @@ interface IBurgerIngredientsState {
     ingredients: TIngredient[],
     activeSection: string,
     loading: boolean,
-    error: {} | string | null,
+    error: TError,
 }
 
-const initialState: IBurgerIngredientsState = {
+export const initialState: IBurgerIngredientsState = {
     isModalOpen: false,
     ingredients: [],
     activeSection: 'bun',

@@ -1,5 +1,6 @@
-import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TIngredient, TIngredientItem } from "../types";
+import { nanoid } from 'nanoid';
 
 interface IBurgerConstructorState {
     bun: TIngredient | null;
@@ -7,7 +8,7 @@ interface IBurgerConstructorState {
     isModalOpen: boolean;
 }
 
-const initialState: IBurgerConstructorState = {
+export const initialState: IBurgerConstructorState = {
     bun: null,
     ingredients: [],
     isModalOpen: false

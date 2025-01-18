@@ -18,7 +18,6 @@ const LoginPage: FC = () => {
     const isEmptyForm = form.email === '' || form.password === '';
 
     const handleLogin = useCallback((e: FormEvent<HTMLFormElement>) => {
-        console.log('handleLogin');
         e.preventDefault();
         if (!isEmptyForm) {
             dispatch(login(form));
@@ -26,7 +25,6 @@ const LoginPage: FC = () => {
     }, [dispatch, form, isEmptyForm]);
 
     if (loading.login) {
-        console.log('loading login');
         return (
             <main className={styles.container}>
                 <h1 className='text text_type_main-medium mb-3'>Входим...</h1>
@@ -36,7 +34,6 @@ const LoginPage: FC = () => {
 
     if (user) {
         const from = location.state?.from?.pathname || '/';
-        console.log(`okay, let's go to ${from}`);
         return (
             <Navigate to={from} replace />
         );

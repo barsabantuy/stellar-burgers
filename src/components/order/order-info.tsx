@@ -76,7 +76,7 @@ const OrderInfo: FC = () => {
                 {order.ingredients.map(ingredientId => {
                     const ingredient = ingredients.find(ing => ing._id === ingredientId);
                     return (
-                        <li className={styles.listItem}>
+                        <li key={ingredientId} className={styles.listItem}>
                             <div className={commonStyles.ingredient}>
                                 <img src={`${ingredient?.image}`} alt=""  />
                             </div>

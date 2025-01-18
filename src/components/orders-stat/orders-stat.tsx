@@ -8,7 +8,7 @@ type TOrdersByStatus = {
     [status: string]: number[];
 }
 
-const MAX_ORDERS_COUNT = 10;
+const MAX_ORDERS_COUNT = 8;
 
 const OrdersStat: FC = () => {
 
