@@ -1,14 +1,14 @@
 /// <reference types="cypress" />
 
 describe('service is available', () => {
-    it('should be available on localhost:3000', () => {
-        cy.visit('http://localhost:3000');
+    it('should be available', () => {
+        cy.visit('/');
     });
 });
 
 describe('create order flow works correctly', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:3000');
+        cy.visit('/');
         cy.intercept('GET', '**/api/auth/user', { fixture: 'user.json' }).as('getUser');
         cy.intercept('GET', '**/api/ingredients', { fixture: 'ingredients.json' }).as('getIngredients');
         cy.wait('@getIngredients').its('response.statusCode').should('eq', 200);

@@ -1,14 +1,7 @@
-import orderDetailsReducer from './order-details-slice';
+import orderDetailsReducer, {initialState} from './order-details-slice';
 import { createOrder } from './order-details-slice';
 import { UNKNOWN_ERROR } from '../utils';
-import {TOrder, TOrderCreated} from '../types';
-
-const initialState = {
-    name: '',
-    order: 0,
-    loading: false,
-    error: null,
-};
+import {TOrderCreated} from '../types';
 
 describe('orderDetailsSlice reducer', () => {
     it('should return the initial state on first run', () => {

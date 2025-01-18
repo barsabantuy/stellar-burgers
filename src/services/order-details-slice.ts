@@ -17,7 +17,7 @@ interface IOrderDetailsState {
     error: TError;
 }
 
-const initialState: IOrderDetailsState = {
+export const initialState: IOrderDetailsState = {
     name: '',
     order: 0,
     loading: false,

@@ -1,21 +1,9 @@
-import passwordResetReducer from './password-reset-slice';
+import passwordResetReducer, {initialState} from './password-reset-slice';
 import {
     forgotPassword,
     resetPassword,
 } from './password-reset-slice';
 import { UNKNOWN_ERROR } from '../utils';
-
-const initialState = {
-    tokenRequested: false,
-    loading: {
-        forgotPassword: false,
-        resetPassword: false,
-    },
-    error: {
-        forgotPassword: null,
-        resetPassword: null,
-    },
-};
 
 describe('passwordReset slice', () => {
     it('should return the initial state on first run', () => {

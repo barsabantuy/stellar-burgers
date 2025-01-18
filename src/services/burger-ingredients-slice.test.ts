@@ -1,17 +1,9 @@
 import burgerIngredientsReducer, {
     burgerIngredientsActions,
-    fetchBurgerIngredients,
+    fetchBurgerIngredients, initialState,
 } from './burger-ingredients-slice';
 import { UNKNOWN_ERROR } from '../utils';
 import { TIngredient } from '../types';
-
-const initialState = {
-    isModalOpen: false,
-    ingredients: [],
-    activeSection: 'bun',
-    loading: false,
-    error: null,
-};
 
 describe('burgerIngredients slice', () => {
     it('should return the initial state on first run', () => {

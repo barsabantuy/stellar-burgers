@@ -60,7 +60,7 @@ interface IAuthState {
     }
 }
 
-const initialState: IAuthState = {
+export const initialState: IAuthState = {
     user: null,
     loading: {
         register: false,

@@ -1,4 +1,4 @@
-import authReducer from './auth-slice';
+import authReducer, {initialState} from './auth-slice';
 import {
     register,
     login,
@@ -16,28 +16,6 @@ const mockUserResponse = (overrides: Partial<TUser> = {}): TUserResponse => ({
         ...overrides,
     },
 });
-
-const initialState = {
-    user: null,
-    loading: {
-        register: false,
-        login: false,
-        getUser: false,
-        updateUser: false,
-        logout: false,
-        forgotPassword: false,
-        resetPassword: false,
-    },
-    error: {
-        register: null,
-        login: null,
-        getUser: null,
-        updateUser: null,
-        logout: null,
-        forgotPassword: null,
-        resetPassword: null,
-    },
-};
 
 describe('auth slice reducer', () => {
     it('should return the initial state on first run', () => {

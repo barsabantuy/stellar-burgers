@@ -15,7 +15,7 @@ interface IBurgerIngredientsState {
     error: TError,
 }
 
-const initialState: IBurgerIngredientsState = {
+export const initialState: IBurgerIngredientsState = {
     isModalOpen: false,
     ingredients: [],
     activeSection: 'bun',

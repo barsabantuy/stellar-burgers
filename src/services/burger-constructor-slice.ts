@@ -8,7 +8,7 @@ interface IBurgerConstructorState {
     isModalOpen: boolean;
 }
 
-const initialState: IBurgerConstructorState = {
+export const initialState: IBurgerConstructorState = {
     bun: null,
     ingredients: [],
     isModalOpen: false
